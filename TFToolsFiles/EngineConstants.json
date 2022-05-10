@@ -1,0 +1,32 @@
+{
+    "Events":[
+        "eGiveItem",
+        "eLearnAttack",
+        "eSendAudio",
+        "eSendImage",
+        "eSendImageCollection",
+        "eSendText",
+        "eSetFlag",
+        "eStartBattle"
+    ],
+    "Stats":[
+        "HP",
+        "ATK",
+        "SPE",
+        "MP"
+    ],
+    "GearSlots":[
+        "HEAD",
+        "FEET",
+        "HANDS",
+        "WRISTS",
+        "FINGER",
+        "TRINKET",
+        "WEAPON",
+        "CHEST",
+        "LEGS",
+        "WAIST",
+        "BACK",
+        "NECK"
+    ]
+}

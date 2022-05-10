@@ -1,7 +1,4 @@
-import enum
 import json
-
-
 
 def checkEngineConstant(constToCheck, type):
     if(type == 'EVENT'):

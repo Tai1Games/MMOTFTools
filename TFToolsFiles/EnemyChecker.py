@@ -5,7 +5,6 @@ def statSize(filesFolder):
 	fails = list()
 	with io.open(filesFolder +'/enemies.json', encoding='utf-8-sig') as json_data:
 		enemyList = json.loads(json_data.read())
-
 	for item in enemyList:
 		try:
 			if len(item["Stats"]) != 4:
@@ -20,5 +19,5 @@ def statSize(filesFolder):
 
 	return fails
 
-def checkAll(filesFolder):
+def checkAll(filesFolder, keyNames):
 	print(f"Stat size check errors: {len(statSize(filesFolder))}")

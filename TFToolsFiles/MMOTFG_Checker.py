@@ -116,6 +116,7 @@ def main():
 		#keyNames.print()
 		#if(keyNames.containsEnemy("Manuela")): print("OUI")
 		if len(sys.argv) == 2:
+			directionsChecker.checkAll(sys.argv[1])
 			print("Running all checks...")
 		else:
 			#Get all relevant arguments

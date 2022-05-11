@@ -5,7 +5,7 @@ import io
 
 #import mapaChecker
 #import itemChecker
-#import directionsChecker
+import directionsChecker
 #import enemiesChecker
 #import attacksChecker
 
@@ -30,6 +30,7 @@ class KeyNamesRecord:
 	availableAttacks = []
 	availableItems = []
 	availableEnemies = []
+	availableDirections = []
 
 	def containsNode(self, n):
 		if any(n in s for s in KeyNamesRecord.availableNodes):
@@ -49,17 +50,21 @@ class KeyNamesRecord:
 
 	def print(self):
 		print("--------\nITEMS")
-		for i in KeyNamesRecord.availableItems:
-			print("  -" + i)
+		for i in self.availableItems:
+			print("\t-" + i)
 		print("--------\nATTACKS")
-		for i in KeyNamesRecord.availableAttacks:
-			print("  -" + i)
+		for i in self.availableAttacks:
+			print("\t-" + i)
 		print("--------\nENEMIES")
-		for i in KeyNamesRecord.availableEnemies:
-			print("  -" + i)
+		for i in self.availableEnemies:
+			print("\t-" + i)
 		print("--------\nMAPNODES")
-		for i in KeyNamesRecord.availableNodes:
-			print("  -" + i)
+		for i in self.availableNodes:
+			print("\t-" + i)
+		print("--------\nDIRECTIONS")
+		for i in self.availableDirections:
+			print("\t-"+i[0], end=": ")
+			print(*i[1:], sep=",")
 
 	def __init__(self, pathToAssets):
 		#---------------------
@@ -68,28 +73,37 @@ class KeyNamesRecord:
 			itemData = json.loads(json_data.read())
 
 		for i in itemData:
-			KeyNamesRecord.availableItems.append(i['Name'])
+			self.availableItems.append(i['Name'])
 		#--------------------
 		#ataques
 		with io.open(pathToAssets+'/attacks.json', encoding='utf-8-sig') as json_data:
 			attackData = json.loads(json_data.read())
 
 		for i in attackData:
-			KeyNamesRecord.availableAttacks.append(i['Name'])
+			self.availableAttacks.append(i['Name'])
 		#--------------------
 		#enemigos
 		with io.open(pathToAssets+'/enemies.json', encoding='utf-8-sig') as json_data:
 			enemyData = json.loads(json_data.read())
 
 		for i in enemyData:
-			KeyNamesRecord.availableEnemies.append(i['Name'])
+			self.availableEnemies.append(i['Name'])
 		#--------------------
 		#nodos
 		with io.open(pathToAssets+'/map.json', encoding='utf-8-sig') as json_data:
 			mapData = json.loads(json_data.read())
 
 		for i in mapData:
-			KeyNamesRecord.availableNodes.append(i['Name'])
+			self.availableNodes.append(i['Name'])
+		#----------------------
+		#directions
+		with io.open(pathToAssets+'/directionSynonyms.json', encoding='utf-8-sig') as json_data:
+			directionsData = json.loads(json_data.read())
+
+		for i in directionsData:
+			synonyms = i["Synonyms"]
+			synonyms.insert(0, i["Direction"])
+			self.availableDirections.append(synonyms)
 		#----------------------
 		return
 
@@ -107,7 +121,7 @@ def main():
 			#Get all relevant arguments
 			arguments = sys.argv[2:]
 			try:
-				opts,args = getopt.getopt(arguments,"hmidea")
+				opts, args = getopt.getopt(arguments, "hmidea")
 
 				for opt, arg in opts:
 					if opt == "-m":
@@ -117,8 +131,8 @@ def main():
 						#check items
 						print("placeholder")
 					elif opt == "-d":
-						#check items
-						print("placeholder")
+						#check directions
+						directionsChecker.checkAll(sys.argv[1])
 					elif opt == "-e":
 						#check items
 						print("placeholder")

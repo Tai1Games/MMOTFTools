@@ -4,7 +4,7 @@ import getopt
 import KNamesRecord
 #import mapaChecker
 #import itemChecker
-#import directionsChecker
+import directionsChecker
 import EnemyChecker
 import AttacksChecker
 
@@ -38,6 +38,7 @@ def main():
 		keyNames = KNamesRecord.KeyNamesRecord(sys.argv[1])
 
 		if len(sys.argv) == 2:
+			directionsChecker.checkAll(sys.argv[1])
 			print("Running all checks...")
 
 			keyNames.checkAll()
@@ -58,8 +59,8 @@ def main():
 						#check items
 						print("placeholder")
 					elif opt == "-d":
-						#check items
-						print("placeholder")
+						#check directions
+						directionsChecker.checkAll(sys.argv[1])
 					elif opt == "-e":
 						EnemyChecker.checkAll(sys.argv[1])
 					elif opt == "-a":

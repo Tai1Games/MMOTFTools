@@ -1,18 +1,17 @@
-import sys
+import sys, os, io
 import getopt
 import json
-import io
 
 #import mapaChecker
 #import itemChecker
 import directionsChecker
-#import enemiesChecker
+import EnemyChecker
 #import attacksChecker
 
 def displayHelp():
 	print(
 '''
-Usage: python MMOTFG_Checker.py <filepath to checked folder> [options]
+Usage: python MMOTFG_Checker.py <filepath to checked directory> [options]
 
 Usage example: python ../files/ -mid
 
@@ -112,12 +111,18 @@ def main():
 	if len(sys.argv) == 1:
 		displayHelp() #no 
 	else:
+		#Check that given filepath exists
+		if not os.path.exists(sys.argv[1]):
+			print("Given directory path is incorrect or doesn't exist")
+			exit(1)
+
+		#Get list of names
 		keyNames = KeyNamesRecord(sys.argv[1])
-		#keyNames.print()
-		#if(keyNames.containsEnemy("Manuela")): print("OUI")
+
 		if len(sys.argv) == 2:
 			directionsChecker.checkAll(sys.argv[1])
 			print("Running all checks...")
+			EnemyChecker.checkAll(sys.argv[1])
 		else:
 			#Get all relevant arguments
 			arguments = sys.argv[2:]
@@ -135,8 +140,7 @@ def main():
 						#check directions
 						directionsChecker.checkAll(sys.argv[1])
 					elif opt == "-e":
-						#check items
-						print("placeholder")
+						EnemyChecker.checkAll(sys.argv[1])
 					elif opt == "-a":
 						#check items
 						print("placeholder")

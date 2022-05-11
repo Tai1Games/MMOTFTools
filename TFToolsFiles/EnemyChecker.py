@@ -19,5 +19,5 @@ def statSize(filesFolder):
 
 	return fails
 
-def checkAll(filesFolder, keyNames):
+def checkAll(filesFolder):
 	print(f"Stat size check errors: {len(statSize(filesFolder))}")

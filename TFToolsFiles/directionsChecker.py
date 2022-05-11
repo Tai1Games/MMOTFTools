@@ -1,4 +1,5 @@
 import io, json
+import Error
 
 #returns a list of lists with format (repeated synonym, ... name of directions that use it ...
 def testSynonyms(directions):
@@ -33,9 +34,13 @@ def synonymsMatrix(path):
     return matrix
 
 def checkAll(folder):
+    errorList = list()
     #TODO loop throug all files named directionSynonyms_*.json
-    matrix = synonymsMatrix(folder+'/directionSynonyms.json')
+    filePath = folder+'/directionSynonyms.json'
+    matrix = synonymsMatrix(filePath)
     res, repeats = testSynonyms(matrix)
-    print(res)
-    print(repeats)
+    for error in repeats:
+        errorList.append((Error.ERRCODE.DIR_REPEATED_SYNONYM, filePath,
+                          ("{1} repeated in {0}".format(error[0], error[1:]))))
+    #print(errorList)
 

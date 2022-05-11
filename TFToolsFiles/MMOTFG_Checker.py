@@ -107,6 +107,7 @@ def main():
 
 		if len(sys.argv) == 2:
 			print("Running all checks...")
+			EnemyChecker.checkAll(sys.argv[1])
 		else:
 			#Get all relevant arguments
 			arguments = sys.argv[2:]

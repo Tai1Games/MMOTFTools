@@ -6,7 +6,7 @@ import json
 #import itemChecker
 import directionsChecker
 import EnemyChecker
-#import attacksChecker
+import AttacksChecker
 
 def displayHelp():
 	print(
@@ -123,6 +123,7 @@ def main():
 			directionsChecker.checkAll(sys.argv[1])
 			print("Running all checks...")
 			EnemyChecker.checkAll(sys.argv[1])
+			AttacksChecker.checkAll(sys.argv[1])
 		else:
 			#Get all relevant arguments
 			arguments = sys.argv[2:]
@@ -142,8 +143,7 @@ def main():
 					elif opt == "-e":
 						EnemyChecker.checkAll(sys.argv[1])
 					elif opt == "-a":
-						#check items
-						print("placeholder")
+						AttacksChecker.checkAll(sys.argv[1])
 					elif opt == "-h":
 						#display help
 						displayHelp()

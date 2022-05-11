@@ -2,6 +2,7 @@ import sys, os
 import getopt
 
 import KNamesRecord
+from KNamesRecord import KeyNamesRecord
 #import mapaChecker
 #import itemChecker
 import directionsChecker
@@ -35,7 +36,7 @@ def main():
 			exit(1)
 
 		#Get list of names
-		keyNames = KNamesRecord.KeyNamesRecord(sys.argv[1])
+		keyNames = KeyNamesRecord(sys.argv[1])
 
 		if len(sys.argv) == 2:
 			directionsChecker.checkAll(sys.argv[1])

@@ -1,5 +1,7 @@
 import io
 import json
+import Error
+from Error import ERRCODE
 
 class KeyNamesRecord:
 	availableNodes = []
@@ -7,10 +9,7 @@ class KeyNamesRecord:
 	availableItems = []
 	availableEnemies = []
 	#-----------------------
-	duplicatedNodes = [] #Lo dejo todos separados porque será más fácil hacer el output en HTML de esta manera
-	duplicatedAttacks = []
-	duplicatedItems = []
-	duplicatedEnemies = []
+	duplicatedNames = []
 
 	def containsNode(self, n):
 		if any(n in s for s in KeyNamesRecord.availableNodes):
@@ -43,11 +42,8 @@ class KeyNamesRecord:
 			print("  -" + i)
 
 	def checkAll(self):
-		print("Checking for repeated keyNames...")	
-		for i in KeyNamesRecord.duplicatedItems: print(i)
-		for i in KeyNamesRecord.duplicatedAttacks: print(i)
-		for i in KeyNamesRecord.duplicatedEnemies: print(i)
-		for i in KeyNamesRecord.duplicatedNodes: print(i)
+		for e in KeyNamesRecord.duplicatedNames: 
+			print(e)
 
 	def __init__(self, pathToAssets):
 		#---------------------
@@ -56,7 +52,7 @@ class KeyNamesRecord:
 			itemData = json.loads(json_data.read())
 		
 		for i in itemData:
-			if(KeyNamesRecord.containsItem(self, i['Name'])): KeyNamesRecord.duplicatedItems.append(f'Item {i["Name"]} is duplicated')
+			if(KeyNamesRecord.containsItem(self, i['Name'])): KeyNamesRecord.duplicatedNames.append((ERRCODE.ITEM_NAME_DUPLICATED, pathToAssets + '/items.json', f'Item {i["Name"]} repeated'))
 			KeyNamesRecord.availableItems.append(i['Name'])
 		#--------------------
 		#ataques
@@ -64,7 +60,7 @@ class KeyNamesRecord:
 			attackData = json.loads(json_data.read())
 
 		for i in attackData:
-			if(KeyNamesRecord.containsAttack(self, i['Name'])): KeyNamesRecord.duplicatedAttacks.append(f'Attack {i["Name"]} is duplicated')
+			if(KeyNamesRecord.containsAttack(self, i['Name'])): KeyNamesRecord.duplicatedNames.append((ERRCODE.ATTACK_NAME_DUPLICATED, pathToAssets + '/attacks.json', f'Attack {i["Name"]} repeated'))
 			KeyNamesRecord.availableAttacks.append(i['Name'])
 		#--------------------
 		#enemigos
@@ -72,7 +68,7 @@ class KeyNamesRecord:
 			enemyData = json.loads(json_data.read())
 
 		for i in enemyData:
-			if(KeyNamesRecord.containsEnemy(self, i['Name'])): KeyNamesRecord.duplicatedEnemies.append(f'Enemy {i["Name"]} is duplicated')
+			if(KeyNamesRecord.containsEnemy(self, i['Name'])): KeyNamesRecord.duplicatedNames.append((ERRCODE.ENEMY_NAME_DUPLICATED, pathToAssets + '/enemies.json', f'Enemy {i["Name"]} repeated'))
 			KeyNamesRecord.availableEnemies.append(i['Name'])
 		#--------------------
 		#nodos
@@ -80,7 +76,7 @@ class KeyNamesRecord:
 			mapData = json.loads(json_data.read())
 
 		for i in mapData:
-			if(KeyNamesRecord.containsNode(self, i['Name'])): KeyNamesRecord.duplicatedNodes.append(f'Node {i["Name"]} is duplicated')
+			if(KeyNamesRecord.containsNode(self, i['Name'])): KeyNamesRecord.duplicatedNames.append((ERRCODE.NODE_NAME_DUPLICATED, pathToAssets + '/map.json', f'Map node {i["Name"]} repeated'))
 			KeyNamesRecord.availableNodes.append(i['Name'])
 		#----------------------
 		return

@@ -31,5 +31,17 @@
             "wes",
             "est"
         ]
+    },
+    {
+        "Direction":"duplicate",
+        "Synonyms": [
+            "duplo"
+        ]
+    },
+        {
+        "Direction":"duplicate",
+        "Synonyms": [
+            "doplo"
+        ]
     }
 ]

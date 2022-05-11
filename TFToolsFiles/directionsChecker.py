@@ -41,6 +41,6 @@ def checkAll(folder):
     res, repeats = testSynonyms(matrix)
     for error in repeats:
         errorList.append((Error.ERRCODE.DIR_REPEATED_SYNONYM, filePath,
-                          ("{1} repeated in {0}".format(error[0], error[1:]))))
-    #print(errorList)
+                          f"{error[0]} repeated in {error[1:]}"))
+    print(errorList)
 

@@ -3,6 +3,7 @@ class ERRCODE(Enum):
     UNKNOWN = 0
     DIR_UNKNOWN = 10
     DIR_REPEATED_SYNONYM = 11
+    DIR_REPEATED_DIRECTION = 12
 
 class Error:
     errCode = ERRCODE.UNKNOWN

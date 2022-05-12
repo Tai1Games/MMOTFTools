@@ -6,7 +6,6 @@ from KNamesRecord import KeyNamesRecord
 #import mapaChecker
 #import itemChecker
 import  MapChecker
-import directionsChecker
 import EnemyChecker
 import AttacksChecker
 

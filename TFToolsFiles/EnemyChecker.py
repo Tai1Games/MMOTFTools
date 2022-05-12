@@ -106,7 +106,7 @@ def checkAll(filesFolder, namesRecord):
     # json references
     res, eMessages = jsonReferences(enemyList, namesRecord)
     for err in eMessages:
-        errorList.append(Error(ERRCODE.ENEMY_ATTACK_SIZE, filePath, f"{err}"))
+        errorList.append(Error(ERRCODE.ENEMY_JSON_REFERENCE, filePath, f"{err}"))
     print(f"Json references check errors: {res}")
 
     # Missing images

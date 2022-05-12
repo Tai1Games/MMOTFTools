@@ -56,6 +56,14 @@ def checkAll(filesFolder, keyNames):
 	checkConnectingNodes(roomsList, filePath, errorList, keyNames)
 	checkEvents(roomsList, filePath, errorList, keyNames)
 
+	# Repeat keys
+	RepeatKeysList = []
+	for node in roomsList:
+		# TODO return for html
+		res, fails = Common.RepeatKeys("maps.json", node)
+		if len(fails) > 0:
+			RepeatKeysList.append(fails)
+	print(f"{len(RepeatKeysList)} repeat key errors found.")
 
 
 	for err in errorList:

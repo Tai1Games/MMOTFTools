@@ -1,8 +1,8 @@
 ﻿[
   {
     "Name": "Overkill",
-    "Power": 100,
-    "MpCost": 10
+    "Power": -100,
+    "MpCost": -10
   },
   {
     "Name": "Patada",
@@ -17,8 +17,7 @@
     "Multiple": 0.5
   },
   {
-    "Name": "Tortazo",
-    "Power": 1.5
+    "Name": "Tortazo"
   },
   {
     "Name": "Tortilla",
@@ -34,7 +33,7 @@
     "MpCost": 1,
     "StatToChange": "ATK",
     "AffectsSelf": true,
-    "Multiple": 2
+    "Multiple": -2
   },
   {
     "AttackType": "aScaled",

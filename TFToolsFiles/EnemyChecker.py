@@ -13,7 +13,7 @@ def statSize(path):
 		except KeyError:
 			try:
 				#Has no Stats property
-				fails.append(f'{item["Name"]} has no stat block')
+				fails.append(f'{item["Name"]} has no Stats block')
 			except KeyError:
 				#Doesn't event have a name lol
 				fails.append(f"An enemy is malformed!")
@@ -31,8 +31,8 @@ def attacksSize(path):
 				fails.append(f'{item["Name"]} requires at least 1 attack')
 		except KeyError:
 			try:
-				#Has no Stats property
-				fails.append(f'{item["Name"]} has no attack block')
+				#Has no Attacks property
+				fails.append(f'{item["Name"]} has no Attacks block')
 			except KeyError:
 				pass
 

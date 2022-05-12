@@ -1,5 +1,7 @@
 import json
 import io
+import Error
+from Error import ERRCODE
 
 def negativeValues(path):
 	fails = list()
@@ -48,7 +50,12 @@ def negativeValues(path):
 	return len(fails), fails
 
 def checkAll(filesFolder):
+	errorList = list()
 	filePath = filesFolder + '/attacks.json'
 	res, eMessages = negativeValues(filePath)
+	for error in eMessages:
+		errorList.append((ERRCODE.ATTACK_NEGATIVE_VALUE, filePath, f"{error}"))
 	print(f"Attacks negative values check errors: {res}")
-	print(eMessages)
+
+	for err in errorList:
+		print(err)

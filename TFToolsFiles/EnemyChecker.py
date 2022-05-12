@@ -1,5 +1,7 @@
 import json
 import io
+import Error
+from Error import ERRCODE
 
 def statSize(path):
 	fails = list()
@@ -38,10 +40,17 @@ def attacksSize(path):
 	return len(fails), fails
 
 def checkAll(filesFolder):
+	errorList = list()
 	filePath = filesFolder + '/enemies.json'
 	res, eMessages = statSize(filePath)
+	for error in eMessages:
+		errorList.append((ERRCODE.ENEMY_STAT_SIZE, filePath, f"{error}"))
 	print(f"Stat size check errors: {res}")
-	print(eMessages)
+
 	res, eMessages = attacksSize(filePath)
+	for error in eMessages:
+		errorList.append((ERRCODE.ENEMY_ATTACK_SIZE, filePath, f"{error}"))
 	print(f"Attacks size check errors: {res}")
-	print(eMessages)
+
+	for err in errorList:
+		print(err)

@@ -1,37 +1,33 @@
 from yattag import Doc, indent
+from Error import *
 
-def createHTML(errorList):
+def createHTML(errorDict):
 
     doc, tag, text, line = Doc().ttl()
 
     with tag('style'):
-        doc.asis('enemies {color: red;}')
+        doc.asis('colorRed {color: red;}')
+        doc.asis('colorGreen {color: green;}')
         doc.asis('mapa {color: orange;}')
-        doc.asis('fuenteChula {font-family: courier}')
+        doc.asis('body {background: #191919; color: #FAFAFA}')
+        doc.asis('divErrores {font-family: courier;}')
 
     with tag('h1'):
-        text("Errores")
-    with tag("fuenteChula"):
-        with tag('enemies'):
+        if(len(errorDict)):
+            line('colorRed', 'Se encontraron los siguientes errores:')
+        else:
+            line('colorGreen', 'No se encontaron errores. Nice!')
+    with tag("divErrores"):
+        for key, value in errorDict.items():
             with tag('h2'):
-                text('Enemigos:')
-            with tag('body'):                    
-                text('Error enemigo')
+                line(str(key), str(key)+":")  # Enemigos:
+            with tag('ul'):
+                for errorInfo in value:  # Cada error
+                    with tag(str(key)):
+                        with tag('li'):
+                            text(str(errorInfo.errCode), " en ", errorInfo.file, " : ", errorInfo.message)
 
-        with tag('mapa'):
-            with tag('h2'):
-                text('Mapa:')
-            with tag('body'):                    
-                text('Error mapa')
-
-        with tag('direcciones'):
-            with tag('h2'):
-                text('Dir:')
-            with tag('ul'):                    
-                for e in errorList:
-                    line('li',e)
-
-    file = open('newsletter.html','w')
+    file = open('newsletter.html', 'w')
 
     file.write(indent(doc.getvalue()))
 
@@ -39,6 +35,9 @@ def createHTML(errorList):
 
     file.close()
 
-eList = ["topo", "alba", "adre", "pipo", "aaaa"]
+E = Error(ERRCODE.ENEMY_NAME_DUPLICATED, "FILE.PNG", "HOLA")
 
-createHTML(eList)
+errDict = {"enemigos": [E],
+            "mapa": [E,E]}
+
+createHTML(errDict)

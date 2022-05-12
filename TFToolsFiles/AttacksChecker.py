@@ -22,13 +22,9 @@ def negativeValues(attacksList):
                 fails.append(
                     f'{item["Name"]} has a negative value at Power')
         except KeyError:
-            try:
-                if item["Multiple"] < 0:
-                    fails.append(
-                        f'{item["Name"]} has a negative value at Multiple')
-            except KeyError:
-                    fails.append(
-                        f'{item["Name"]} attack requires a Power or Multiple field!')
+            if item["Multiple"] < 0:
+                fails.append(
+                    f'{item["Name"]} has a negative value at Multiple')
 
     return len(fails), fails
 
@@ -40,6 +36,20 @@ def checkAll(filesFolder):
         attacksList = json.loads(json_data.read())
 
     errorList = []
+
+    # Exist keys
+    ExistKeysList = []
+    # Contains objects with the required keys
+    completedAttacksList = []
+    for attack in attacksList:
+        # TODO return for html
+        res, fails = Common.ExistKeys(filePath, [], ["Power", "Multiple"], attack)
+        if res > 0:
+            ExistKeysList.append(fails)
+        else:
+            completedAttacksList.append(attack)
+    attacksList = completedAttacksList
+    print(f"Attacks missing keys check errors: {len(ExistKeysList)}")
 
     # Negative values
     res, eMessages = negativeValues(attacksList)

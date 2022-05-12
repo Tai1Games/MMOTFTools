@@ -5,11 +5,7 @@ import Common
 from Error import ERRCODE, Error
 
 
-def existingImage(path):
-    with io.open(path, encoding='utf-8-sig') as json_data:
-        enemyList = json.loads(json_data.read())
-    imagesPath = os.path.dirname(path) + '/images/'
-
+def existingImage(enemyList,imagesPath):
     missingImages = [enemy["Name"] for enemy in enemyList
                     if "ImageName" not in enemy.keys() or
                     not os.path.isfile(imagesPath+enemy["ImageName"])]
@@ -20,12 +16,8 @@ def statSize(enemyList):
     fails = list()
 
     for item in enemyList:
-        try:
-            if len(item["Stats"]) != 4:
-                fails.append(f'{item["Name"]} doesn\'t have 4 stats')
-        except KeyError:
-            #Has no Stats property
-            fails.append(f'{item["Name"]} has no Stats block')
+        if len(item["Stats"]) != 4:
+            fails.append(f'{item["Name"]} doesn\'t have 4 stats')
 
     return len(fails), fails
 
@@ -33,13 +25,8 @@ def attacksSize(enemyList):
     fails = list()
 
     for item in enemyList:
-        try:
-            if len(item["Attacks"]) < 1:
-                fails.append(f'{item["Name"]} requires at least 1 attack')
-        except KeyError:
-            #Has no Attacks property
-            fails.append(f'{item["Name"]} has no Attacks block')
-
+        if len(item["Attacks"]) < 1:
+            fails.append(f'{item["Name"]} requires at least 1 attack')
 
     return len(fails), fails
 
@@ -50,6 +37,20 @@ def checkAll(filesFolder):
         enemyList = json.loads(json_data.read())
 
     errorList = []
+
+    # Exist keys
+    ExistKeysList = []
+    # Contains objects with the required keys
+    completedEnemiesList = []
+    for enemy in enemyList:
+        # TODO return for html
+        res, fails = Common.ExistKeys(filePath, ["Stats", "Attacks", "ImageName"], [], enemy)
+        if res > 0:
+            ExistKeysList.append(fails)
+        else:
+            completedEnemiesList.append(enemy)
+    enemyList = completedEnemiesList
+    print(f"Enemies missing keys check errors: {len(ExistKeysList)}")
 
     # Statblock size
     res, eMessages = statSize(enemyList)
@@ -64,7 +65,7 @@ def checkAll(filesFolder):
     print(f"Attacks size check errors: {res}")
 
     #Missing images
-    res, eMessages = existingImage(filePath)
+    res, eMessages = existingImage(enemyList, os.path.dirname(filePath) + '/images/')
     for err in eMessages:
         errorList.append(Error(ERRCODE.ENEMY_IMAGE_MISSING, filePath, f"{err} enemy has no image"))
     print(f"Missing image check errors: {res}")

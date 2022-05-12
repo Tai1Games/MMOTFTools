@@ -1,6 +1,6 @@
 import io, json
-import Error
-from Error import ERRCODE
+import Common
+from Error import Error,ERRCODE
 
 #returns a list of lists with format (repeated synonym, ... name of directions that use it ...
 def testSynonyms(directions):
@@ -32,11 +32,8 @@ def testRepeatedDirection(directions):
 
 
 
-def synonymsMatrix(path):
+def synonymsMatrix(directionsData):
     matrix = list()
-
-    with io.open(path, encoding='utf-8-sig') as json_data:
-        directionsData = json.loads(json_data.read())
 
     for i in directionsData:
         synonyms = i["Synonyms"]
@@ -49,7 +46,25 @@ def checkAll(folder):
     errorList = list()
     #TODO loop throug all files named directionSynonyms_*.json
     filePath = folder+'/directionSynonyms.json'
-    matrix = synonymsMatrix(filePath)
+
+    with io.open(filePath, encoding='utf-8-sig') as json_data:
+        directionsList = json.loads(json_data.read())
+
+    # Exist keys
+    ExistKeysList = []
+    # Contains objects with the required keys
+    completedDirectionsList = []
+    for dir in directionsList:
+        # TODO return for html
+        res, fails = Common.ExistKeys(filePath, ["Direction", "Synonyms"], [], dir)
+        if res > 0:
+            ExistKeysList.append(fails)
+        else:
+            completedDirectionsList.append(dir)
+    directionsList = completedDirectionsList
+    print(f"Direction missing keys check errors: {len(ExistKeysList)}")
+
+    matrix = synonymsMatrix(directionsList)
     #Repeated direction
     res, repeats = testRepeatedDirection(matrix)
     for error in repeats:

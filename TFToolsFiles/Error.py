@@ -9,6 +9,8 @@ class ERRCODE(Enum):
     ENEMY_NAME_DUPLICATED = 15
     NODE_NAME_DUPLICATED = 16
 
+    OBJECT_KEYS_DUPLICATED = 90
+
 class Error:
     errCode = ERRCODE.UNKNOWN
     file = "somefile"

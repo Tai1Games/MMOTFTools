@@ -1,10 +1,8 @@
-import json
-import io
+import Common, json, io
 
-def statSize(filesFolder):
+def statSize(enemyList):
 	fails = list()
-	with io.open(filesFolder +'/enemies.json', encoding='utf-8-sig') as json_data:
-		enemyList = json.loads(json_data.read())
+	
 	for item in enemyList:
 		try:
 			if len(item["Stats"]) != 4:
@@ -20,4 +18,18 @@ def statSize(filesFolder):
 	return fails
 
 def checkAll(filesFolder):
-	print(f"Stat size check errors: {len(statSize(filesFolder))}")
+	print(f"Checking enemies...")
+	with io.open(filesFolder +'/enemies.json', encoding='utf-8-sig') as json_data:
+		enemyList = json.loads(json_data.read())
+
+	#Statblock size
+	print(f"Stat size check errors: {len(statSize(enemyList))}")
+
+	# Repeat keys
+	RepeatKeysList = []
+	for enemy in enemyList:
+		# TODO return for html
+		res, fails = Common.RepeatKeys("enemies.json", enemy)
+		if len(fails) > 0:
+			RepeatKeysList.append(fails)
+	print(f"{len(RepeatKeysList)} repeat key errors found.")

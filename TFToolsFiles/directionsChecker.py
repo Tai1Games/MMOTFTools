@@ -4,21 +4,23 @@ from Error import ERRCODE
 
 #returns a list of lists with format (repeated synonym, ... name of directions that use it ...
 def testSynonyms(directions):
-    repeats = list()
+    repeats = dict()
 
-    for i, dir in enumerate(directions):
-        for dirAlias in dir:
+    synonyms = [dir[1:] for dir in directions]
+    for synList in synonyms:
+        for dirAlias in synList:
             foundIn = list()
             #Check against all other directions
-            for otherDirs in filter(lambda x: x != dir, directions):
-                if dirAlias in otherDirs:
-                    foundIn.append(otherDirs[0])
+            for otherSyns in filter(lambda x: x != synList, synonyms):
+                if dirAlias in otherSyns:
+                    foundIn.append(otherSyns[0])
             if len(foundIn) > 0:
-                foundIn.insert(0, dir[0])
-                foundIn.insert(0, dirAlias)
-                #Dont add duplicate values
-                if len(repeats) == 0 or not any(element[0] == dirAlias for element in repeats):
-                    repeats.append(foundIn)
+                #If the current synonym is a known repeat, append the direction it refers to
+                if dirAlias in repeats.keys():
+                    repeats[dirAlias].append(directions[synonyms.index(synList)][0])
+                else:
+                    #Add new duplicate
+                    repeats[dirAlias] = [directions[synonyms.index(synList)][0]]
     return len(repeats) > 0, repeats
 
 def testRepeatedDirection(directions):
@@ -55,9 +57,9 @@ def checkAll(folder):
                           f"{error} direction is duplicate"))
     #Repeated alias
     res, repeats = testSynonyms(matrix)
-    for error in repeats:
-        errorList.append((ERRCODE.DIR_REPEATED_SYNONYM, filePath,
-                          f"{error[0]} repeated in {error[1:]}"))
+    for k, v in repeats.items():
+        errorList.append((Error.ERRCODE.DIR_REPEATED_SYNONYM, filePath,
+                          f"{k} repeated in {v}"))
     for err in errorList:
         print(err)
 

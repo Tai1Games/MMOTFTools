@@ -5,7 +5,6 @@ def statSize(filesFolder):
 	fails = list()
 	with io.open(filesFolder +'/enemies.json', encoding='utf-8-sig') as json_data:
 		enemyList = json.loads(json_data.read())
-
 	for item in enemyList:
 		try:
 			if len(item["Stats"]) != 4:

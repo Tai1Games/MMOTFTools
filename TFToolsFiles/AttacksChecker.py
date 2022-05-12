@@ -1,9 +1,10 @@
 import json
 import io
+from Error import ERRCODE, Error
 
-def negativeValues(filesFolder):
+def negativeValues(path):
 	fails = list()
-	with io.open(filesFolder +'/attacks.json', encoding='utf-8-sig') as json_data:
+	with io.open(path, encoding='utf-8-sig') as json_data:
 		attacksList = json.loads(json_data.read())
 
 	for item in attacksList:
@@ -48,6 +49,12 @@ def negativeValues(filesFolder):
 	return len(fails), fails
 
 def checkAll(filesFolder):
-	res, fails = negativeValues(filesFolder)
+	errorList = list()
+	filePath = filesFolder + '/attacks.json'
+	res, eMessages = negativeValues(filePath)
+	for err in eMessages:
+		errorList.append(Error(ERRCODE.ATTACK_NEGATIVE_VALUE, filePath, f"{err}"))
 	print(f"Attacks negative values check errors: {res}")
-	print(fails)
+
+	for err in errorList:
+		print(err)

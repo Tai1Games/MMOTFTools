@@ -29,6 +29,7 @@ def checkEnemy(event, filePath, errorList, keyNames):
             f"{event} node does not have enemy/enemies"))
     return
 
+
 def checkSingleEvent(event, filePath, errorList, keyNames):
     requiredFields = Program.getEngineConstants(event['EventType'])
     for field in requiredFields:
@@ -36,7 +37,9 @@ def checkSingleEvent(event, filePath, errorList, keyNames):
             errorList.append((ERRCODE.EVENT_MISSING_FIELD, filePath,
                         f"{field} does not exist in event"))
         elif(field == 'ItemLots'):
-            keyNames.containsItem(event['ItemLots'][0]['Item'])
+            if(keyNames.containsItem(event['ItemLots'][0]['Item']) != True):
+                errorList.append((ERRCODE.ITEM_DOES_NOT_EXIST, filePath,
+                    f"{event['ItemLots'][0]['Item']} item does not exist"))
     if(event['EventType'] == 'eStartBattle'):
         checkEnemy(event, filePath, errorList, keyNames)
 

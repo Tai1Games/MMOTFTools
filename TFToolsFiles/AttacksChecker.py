@@ -1,7 +1,6 @@
 import json
 import io
-import Error
-from Error import ERRCODE
+from Error import ERRCODE, Error
 
 def negativeValues(path):
 	fails = list()

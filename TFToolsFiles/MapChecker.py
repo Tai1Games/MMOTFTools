@@ -13,12 +13,23 @@ def checkConnectingNodes(roomsList, filePath, errorList, keyNames):
 						  f"{name} node does not exists"))
 
 
-def checkEventType(event, filePath, errorList, keyNames):
+def checkSingleEvent(event, filePath, errorList):
+	requiredFields = Program.getEngineConstants(event['EventType'])
+	for field in requiredFields:
+		if(field not in event):
+			errorList.append((ERRCODE.EVENT_MISSING_FIELD, filePath,
+						f"{field} does not exist in event"))
+		
+
+
+
+def checkEventType(event, filePath, errorList):
 	for e in event:
 		if(Program.checkEngineConstant(e['EventType'], "EVENTTYPE") != True):
 			errorList.append((ERRCODE.NODE_EVENT_DOES_NOT_EXIST, filePath,
 						f"{e['EventType']} event does not exist"))
-	return
+		else:
+			checkSingleEvent(e, filePath, errorList)
 
 
 
@@ -26,10 +37,9 @@ def checkEvents(roomsList, filePath, errorList, keyNames):
 	events = Program.getEngineConstants("EVENTS")
 	
 	for room in roomsList:
-		print("")
 		for event in events:			 
 			if(event in room):
-				checkEventType(room[event], filePath, errorList, keyNames)
+				checkEventType(room[event], filePath, errorList)
 
 
 def checkAll(filesFolder, keyNames):

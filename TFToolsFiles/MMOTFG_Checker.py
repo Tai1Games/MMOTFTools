@@ -43,7 +43,7 @@ def main():
 			keyNames.checkAll()
 			DirectionsChecker.checkAll(sys.argv[1])
 			AttacksChecker.checkAll(sys.argv[1])
-			EnemyChecker.checkAll(sys.argv[1])
+			EnemyChecker.checkAll(sys.argv[1],keyNames)
 			ItemChecker.checkAll(sys.argv[1])
 			MapChecker.checkAll(sys.argv[1])
 		else:
@@ -64,7 +64,7 @@ def main():
 						#check directions
 						DirectionsChecker.checkAll(sys.argv[1])
 					elif opt == "-e":
-						EnemyChecker.checkAll(sys.argv[1])
+						EnemyChecker.checkAll(sys.argv[1],keyNames)
 					elif opt == "-a":
 						AttacksChecker.checkAll(sys.argv[1])
 					elif opt == "-h":

@@ -53,10 +53,6 @@ def checkAll(filesFolder, keyNames):
 	with io.open(filePath, encoding='utf-8-sig') as json_data:
 		roomsList = json.loads(json_data.read())
 	
-
-	checkConnectingNodes(roomsList, filePath, errorList, keyNames)
-	checkEvents(roomsList, filePath, errorList, keyNames)
-
 	# Repeat keys
 	RepeatKeysList = []
 	for node in roomsList:
@@ -67,5 +63,8 @@ def checkAll(filesFolder, keyNames):
 	print(f"{len(RepeatKeysList)} repeat key errors found.")
 
 
-	for err in errorList:
-		print(err)
+	#Map errores
+	checkConnectingNodes(roomsList, filePath, errorList, keyNames)
+	checkEvents(roomsList, filePath, errorList, keyNames)
+	
+	print(f"{len(errorList)} map errors found.")

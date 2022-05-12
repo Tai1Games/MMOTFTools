@@ -1,6 +1,6 @@
 ﻿[
   {
-    "Name": "Manuela",
+    "Name": "Manuela_Imagen_Inexistente",
     "Stats": [ 100, 10, 15, 25 ],
     "ImageName": "manoola.jpg",
     "ImageCaption": "Manuela ataca!",
@@ -27,6 +27,28 @@
     "OnKill":{
       "BehaviourType": "bSetFlag",
       "Name": "ManuelaKilled",
+      "SetAs":"True"
+    }
+  },
+  {
+    "Name": "Cleonft_sin_campo_imagen",
+    "Stats": [ 100, 5, 15, 20 ],
+    "NoTengoImagen": "cleonft.png",
+    "ImageCaption": "¡Cleonft viene a mintearte la carrera!",
+    "DroppedMoney": 2223,
+    "DroppedItem": "mana_potion",
+    "DroppedItemAmount": 2,
+    "Attacks": [ "Chiste sobre javascript", "El PCE es maravilloso", "No Fucking Thanks" ],
+    "OnHit": {
+      "BehaviourType": "bChangeStat",
+      "StatToChange": "ATK",
+      "Change": -1,
+      "Chance": 0.5,
+      "Message": "Cleon y el mono se debaten sobre si deberían matarte o no. Su ataque baja un poco."
+    },
+    "OnKill":{
+      "BehaviourType":"bSetFlag",
+      "Name":"CleonftDefeated",
       "SetAs":"True"
     }
   }

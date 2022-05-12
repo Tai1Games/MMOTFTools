@@ -10,7 +10,9 @@ def existingImage(path):
         enemyList = json.loads(json_data.read())
     imagesPath = os.path.dirname(path) + '/images/'
 
-    missingImages = [enemy["Name"] for enemy in enemyList if not os.path.isfile(imagesPath+enemy["ImageName"])]
+    missingImages = [enemy["Name"] for enemy in enemyList
+                     if "ImageName" not in enemy.keys() or
+                     not os.path.isfile(imagesPath+enemy["ImageName"])]
 
     return len(missingImages), missingImages
 

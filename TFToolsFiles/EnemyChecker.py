@@ -43,13 +43,13 @@ def checkAll(filesFolder):
 	errorList = list()
 	filePath = filesFolder + '/enemies.json'
 	res, eMessages = statSize(filePath)
-	for error in eMessages:
-		errorList.append((ERRCODE.ENEMY_STAT_SIZE, filePath, f"{error}"))
+	for err in eMessages:
+		errorList.append(Error(ERRCODE.ENEMY_STAT_SIZE, filePath, f"{err}"))
 	print(f"Stat size check errors: {res}")
 
 	res, eMessages = attacksSize(filePath)
-	for error in eMessages:
-		errorList.append((ERRCODE.ENEMY_ATTACK_SIZE, filePath, f"{error}"))
+	for err in eMessages:
+		errorList.append(Error(ERRCODE.ENEMY_ATTACK_SIZE, filePath, f"{err}"))
 	print(f"Attacks size check errors: {res}")
 
 	for err in errorList:

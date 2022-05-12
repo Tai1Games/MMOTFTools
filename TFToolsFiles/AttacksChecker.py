@@ -53,8 +53,8 @@ def checkAll(filesFolder):
 	errorList = list()
 	filePath = filesFolder + '/attacks.json'
 	res, eMessages = negativeValues(filePath)
-	for error in eMessages:
-		errorList.append((ERRCODE.ATTACK_NEGATIVE_VALUE, filePath, f"{error}"))
+	for err in eMessages:
+		errorList.append(Error(ERRCODE.ATTACK_NEGATIVE_VALUE, filePath, f"{err}"))
 	print(f"Attacks negative values check errors: {res}")
 
 	for err in errorList:

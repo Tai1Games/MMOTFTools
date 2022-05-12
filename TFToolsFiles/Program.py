@@ -1,8 +1,8 @@
 import json
 
 def checkEngineConstant(constToCheck, type):
-    if(type == 'EVENT'):
-        if any(constToCheck in s for s in engine_constants['Events']):
+    if(type == 'EVENTTYPE'):
+        if any(constToCheck in s for s in engine_constants['EventsType']):
              return True
     elif(type == 'STAT'):
         if any(constToCheck in s for s in engine_constants['Stats']):
@@ -10,12 +10,21 @@ def checkEngineConstant(constToCheck, type):
     elif(type == 'GEARSLOT'):
         if any(constToCheck in s for s in engine_constants['GearSlots']):
              return True
+    elif(type == 'EVENT'):
+        if any(constToCheck in s for s in engine_constants['Events']):
+             return True
     return False
+
+def getEngineConstants(constantsToGet):
+    if(constantsToGet == "EVENTS"):
+        return engine_constants['Events']
+    elif(constantsToGet in engine_constants):
+        return engine_constants[constantsToGet]
 
 #----------------------------------------------------------
 
-with open('TFToolsFiles/EngineConstants.json', 'r') as f:
+with open('EngineConstants.json', 'r') as f:
     engine_constants = json.load(f)
 
-if(checkEngineConstant("Cock", "GEARSLOT")): print("OUI VEGGI GUD DIS MAP")
-else: print("OH NON NON DIS MAP IS BEGGRI BAD U SEE")
+#if(checkEngineConstant("Cock", "GEARSLOT")): print("OUI VEGGI GUD DIS MAP")
+#else: print("OH NON NON DIS MAP IS BEGGRI BAD U SEE")

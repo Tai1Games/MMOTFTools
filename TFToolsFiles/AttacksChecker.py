@@ -65,3 +65,5 @@ def checkAll(filesFolder):
         if len(fails) > 0:
             RepeatKeysList.append(fails)
     print(f"{res} repeat key errors found.")
+    
+    return errorList

@@ -2,7 +2,6 @@ import io, json
 import Common
 from Error import Error,ERRCODE
 
-#returns a list of lists with format (repeated synonym, ... name of directions that use it ...
 def testSynonyms(directions):
     repeats = dict()
 
@@ -10,18 +9,21 @@ def testSynonyms(directions):
     for synList in synonyms:
         for dirAlias in synList:
             foundIn = list()
-            #Check against all other directions
+            # Check against all other directions
             for otherSyns in filter(lambda x: x != synList, synonyms):
                 if dirAlias in otherSyns:
                     foundIn.append(otherSyns[0])
             if len(foundIn) > 0:
-                #If the current synonym is a known repeat, append the direction it refers to
+                # If the current synonym is a known repeat, append the direction it refers to
                 if dirAlias in repeats.keys():
-                    repeats[dirAlias].append(directions[synonyms.index(synList)][0])
+                    repeats[dirAlias].append(
+                        directions[synonyms.index(synList)][0])
                 else:
-                    #Add new duplicate
-                    repeats[dirAlias] = [directions[synonyms.index(synList)][0]]
+                    # Add new duplicate
+                    repeats[dirAlias] = [
+                        directions[synonyms.index(synList)][0]]
     return len(repeats) > 0, repeats
+
 
 def testRepeatedDirection(directions):
     dirNames = [item[0] for item in directions]
@@ -42,9 +44,10 @@ def synonymsMatrix(directionsData):
 
     return matrix
 
+
 def checkAll(folder):
     errorList = list()
-    #TODO loop throug all files named directionSynonyms_*.json
+    # TODO loop throug all files named directionSynonyms_*.json
     filePath = folder+'/directionSynonyms.json'
 
     with io.open(filePath, encoding='utf-8-sig') as json_data:
@@ -68,13 +71,12 @@ def checkAll(folder):
     #Repeated direction
     res, repeats = testRepeatedDirection(matrix)
     for error in repeats:
-        errorList.append((ERRCODE.DIR_REPEATED_DIRECTION, filePath,
-                          f"{error} direction is duplicate"))
-    #Repeated alias
+        errorList.append(Error(ERRCODE.DIR_REPEATED_DIRECTION, filePath,
+                               f"{error} direction is duplicate"))
+    # Repeated alias
     res, repeats = testSynonyms(matrix)
     for k, v in repeats.items():
         errorList.append((ERRCODE.DIR_REPEATED_SYNONYM, filePath,
                           f"{k} repeated in {v}"))
-    for err in errorList:
-        print(err)
 
+    return errorList

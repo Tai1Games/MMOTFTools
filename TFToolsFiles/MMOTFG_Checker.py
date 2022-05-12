@@ -64,7 +64,7 @@ def main():
             itemErrors = ItemChecker.checkAll(sys.argv[1])
             if len(itemErrors) > 0: allErrorsDict.update({"itemErrors": itemErrors})
 
-            mapErrors = MapChecker.checkAll(sys.argv[1])
+            mapErrors = MapChecker.checkAll(sys.argv[1], keyNames)
             if len(mapErrors) > 0: allErrorsDict.update({"mapErrors": mapErrors})            
         else:
             # Get all relevant arguments
@@ -76,7 +76,7 @@ def main():
                 for opt, arg in opts:
                     if opt == "-m":
                         # check maps
-                        mapErrors = MapChecker.checkAll(sys.argv[1])
+                        mapErrors = MapChecker.checkAll(sys.argv[1], keyNames)
                         if len(mapErrors) > 0: allErrorsDict.update({"mapErrors": mapErrors})
                     elif opt == "-i":
                         # check items

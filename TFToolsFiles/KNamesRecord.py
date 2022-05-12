@@ -74,7 +74,7 @@ class KeyNamesRecord:
             self.availableEnemies.append(i['Name'])
         #--------------------
         #nodos
-        with io.open(pathToAssets+'/map.json', encoding='utf-8-sig') as json_data:
+        with io.open(pathToAssets+'/mapejemplo.json', encoding='utf-8-sig') as json_data:
             mapData = json.loads(json_data.read())
 
         for i in mapData:

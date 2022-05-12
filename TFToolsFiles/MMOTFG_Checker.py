@@ -2,8 +2,8 @@ import sys, os, io
 import getopt
 import json
 
-#import mapaChecker
 #import itemChecker
+import  MapChecker
 import directionsChecker
 import EnemyChecker
 import AttacksChecker

@@ -56,7 +56,7 @@ class KeyNamesRecord:
             try:
                 i['Name']
             except KeyError:
-                raise Exception(f'Missing field Name from Items file at Item {idx}')
+                raise Exception(f'Missing key Name from Items file at Item {idx}')
             if(self.containsItem(i['Name'])): self.duplicatedNames.append(Error(ERRCODE.ITEM_NAME_DUPLICATED, pathToAssets + '/items.json', f'Item {i["Name"]} repeated'))
             self.availableItems.append(i['Name'])
         #--------------------
@@ -68,7 +68,7 @@ class KeyNamesRecord:
             try:
                 i['Name']
             except KeyError:
-                raise Exception(f'Missing field Name from Attacks file at Attack {idx}')
+                raise Exception(f'Missing key Name from Attacks file at Attack {idx}')
             if(self.containsAttack(i['Name'])): self.duplicatedNames.append(Error(ERRCODE.ATTACK_NAME_DUPLICATED, pathToAssets + '/attacks.json', f'Attack {i["Name"]} repeated'))
             self.availableAttacks.append(i['Name'])
         #--------------------
@@ -80,7 +80,7 @@ class KeyNamesRecord:
             try:
                 i['Name']
             except KeyError:
-                raise Exception(f'Missing field Name from Enemies file at Enemy {idx}')
+                raise Exception(f'Missing key Name from Enemies file at Enemy {idx}')
             if(self.containsEnemy(i['Name'])): self.duplicatedNames.append(Error(ERRCODE.ENEMY_NAME_DUPLICATED, pathToAssets + '/enemies.json', f'Enemy {i["Name"]} repeated'))
             self.availableEnemies.append(i['Name'])
         #--------------------
@@ -92,7 +92,7 @@ class KeyNamesRecord:
             try:
                 i['Name']
             except KeyError:
-                raise Exception(f'Missing field Name from Map file at Node {idx}')
+                raise Exception(f'Missing key Name from Map file at Node {idx}')
             if(self.containsNode(i['Name'])): self.duplicatedNames.append(Error(ERRCODE.NODE_NAME_DUPLICATED, pathToAssets + '/map.json', f'Map node {i["Name"]} repeated'))
             self.availableNodes.append(i['Name'])
         #----------------------

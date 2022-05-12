@@ -54,7 +54,7 @@ class KeyNamesRecord:
             itemData = json.loads(json_data.read())
 
         for i in itemData:
-            if(self.containsItem(i['Name'])): self.duplicatedNames.append(Error(ERRCODE.ITEM_NAME_DUPLICATED, pathToAssets + '/items.json', f'Item {i["Name"]} repeated'))
+            if(self.containsItem(i['Name'])): self.duplicatedNames.append(Error(ERRCODE.NAME_ITEM_DUPLICATED, pathToAssets + '/items.json', f'Item {i["Name"]} repeated'))
             self.availableItems.append(i['Name'])
         #--------------------
         #ataques
@@ -62,7 +62,7 @@ class KeyNamesRecord:
             attackData = json.loads(json_data.read())
 
         for i in attackData:
-            if(self.containsAttack(i['Name'])): self.duplicatedNames.append(Error(ERRCODE.ATTACK_NAME_DUPLICATED, pathToAssets + '/attacks.json', f'Attack {i["Name"]} repeated'))
+            if(self.containsAttack(i['Name'])): self.duplicatedNames.append(Error(ERRCODE.NAME_ATTACK_DUPLICATED, pathToAssets + '/attacks.json', f'Attack {i["Name"]} repeated'))
             self.availableAttacks.append(i['Name'])
         #--------------------
         #enemigos
@@ -70,7 +70,7 @@ class KeyNamesRecord:
             enemyData = json.loads(json_data.read())
 
         for i in enemyData:
-            if(self.containsEnemy(i['Name'])): self.duplicatedNames.append(Error(ERRCODE.ENEMY_NAME_DUPLICATED, pathToAssets + '/enemies.json', f'Enemy {i["Name"]} repeated'))
+            if(self.containsEnemy(i['Name'])): self.duplicatedNames.append(Error(ERRCODE.NAME_ENEMY_DUPLICATED, pathToAssets + '/enemies.json', f'Enemy {i["Name"]} repeated'))
             self.availableEnemies.append(i['Name'])
         #--------------------
         #nodos
@@ -78,7 +78,7 @@ class KeyNamesRecord:
             mapData = json.loads(json_data.read())
 
         for i in mapData:
-            if(self.containsNode(i['Name'])): self.duplicatedNames.append(Error(ERRCODE.NODE_NAME_DUPLICATED, pathToAssets + '/map.json', f'Map node {i["Name"]} repeated'))
+            if(self.containsNode(i['Name'])): self.duplicatedNames.append(Error(ERRCODE.NAME_NODE_DUPLICATED, pathToAssets + '/map.json', f'Map node {i["Name"]} repeated'))
             self.availableNodes.append(i['Name'])
         #----------------------
         return

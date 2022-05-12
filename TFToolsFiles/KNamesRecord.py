@@ -1,6 +1,7 @@
 import io
 import json
 import Error
+from Error import Error
 from Error import ERRCODE
 
 class KeyNamesRecord:
@@ -12,38 +13,40 @@ class KeyNamesRecord:
 	duplicatedNames = []
 
 	def containsNode(self, n):
-		if any(n in s for s in KeyNamesRecord.availableNodes):
+		if any(n in s for s in self.availableNodes):
 			return True
 			
 	def containsAttack(self, a):
-		if any(a in s for s in KeyNamesRecord.availableAttacks):
+		if any(a in s for s in self.availableAttacks):
 			return True
 
 	def containsItem(self, i):
-		if any(i in s for s in KeyNamesRecord.availableItems):
+		if any(i in s for s in self.availableItems):
 			return True
 
 	def containsEnemy(self, e):
-		if any(e in s for s in KeyNamesRecord.availableEnemies):
+		if any(e in s for s in self.availableEnemies):
 			return True
 
 	def print(self):
 		print("--------\nITEMS")
-		for i in KeyNamesRecord.availableItems:
+		for i in self.availableItems:
 			print("  -" + i)
 		print("--------\nATTACKS")
-		for i in KeyNamesRecord.availableAttacks:
+		for i in self.availableAttacks:
 			print("  -" + i)
 		print("--------\nENEMIES")
-		for i in KeyNamesRecord.availableEnemies:
+		for i in self.availableEnemies:
 			print("  -" + i)
 		print("--------\nMAPNODES")
-		for i in KeyNamesRecord.availableNodes:
+		for i in self.availableNodes:
 			print("  -" + i)
 
 	def checkAll(self):
-		for e in KeyNamesRecord.duplicatedNames: 
-			print(e)
+		for e in self.duplicatedNames: 
+			print(e.errCode, end = ' ')
+			print("@" + e.file + ": " + e.message)
+		return self.duplicatedNames
 
 	def __init__(self, pathToAssets):
 		#---------------------
@@ -52,31 +55,31 @@ class KeyNamesRecord:
 			itemData = json.loads(json_data.read())
 		
 		for i in itemData:
-			if(KeyNamesRecord.containsItem(self, i['Name'])): KeyNamesRecord.duplicatedNames.append((ERRCODE.ITEM_NAME_DUPLICATED, pathToAssets + '/items.json', f'Item {i["Name"]} repeated'))
-			KeyNamesRecord.availableItems.append(i['Name'])
+			if(self.containsItem(i['Name'])): self.duplicatedNames.append(Error(ERRCODE.ITEM_NAME_DUPLICATED, pathToAssets + '/items.json', f'Item {i["Name"]} repeated'))
+			self.availableItems.append(i['Name'])
 		#--------------------
 		#ataques
 		with io.open(pathToAssets+'/attacks.json', encoding='utf-8-sig') as json_data:
 			attackData = json.loads(json_data.read())
 
 		for i in attackData:
-			if(KeyNamesRecord.containsAttack(self, i['Name'])): KeyNamesRecord.duplicatedNames.append((ERRCODE.ATTACK_NAME_DUPLICATED, pathToAssets + '/attacks.json', f'Attack {i["Name"]} repeated'))
-			KeyNamesRecord.availableAttacks.append(i['Name'])
+			if(self.containsAttack(i['Name'])): self.duplicatedNames.append(Error(ERRCODE.ATTACK_NAME_DUPLICATED, pathToAssets + '/attacks.json', f'Attack {i["Name"]} repeated'))
+			self.availableAttacks.append(i['Name'])
 		#--------------------
 		#enemigos
 		with io.open(pathToAssets+'/enemies.json', encoding='utf-8-sig') as json_data:
 			enemyData = json.loads(json_data.read())
 
 		for i in enemyData:
-			if(KeyNamesRecord.containsEnemy(self, i['Name'])): KeyNamesRecord.duplicatedNames.append((ERRCODE.ENEMY_NAME_DUPLICATED, pathToAssets + '/enemies.json', f'Enemy {i["Name"]} repeated'))
-			KeyNamesRecord.availableEnemies.append(i['Name'])
+			if(self.containsEnemy(i['Name'])): self.duplicatedNames.append(Error(ERRCODE.ENEMY_NAME_DUPLICATED, pathToAssets + '/enemies.json', f'Enemy {i["Name"]} repeated'))
+			self.availableEnemies.append(i['Name'])
 		#--------------------
 		#nodos
 		with io.open(pathToAssets+'/map.json', encoding='utf-8-sig') as json_data:
 			mapData = json.loads(json_data.read())
 
 		for i in mapData:
-			if(KeyNamesRecord.containsNode(self, i['Name'])): KeyNamesRecord.duplicatedNames.append((ERRCODE.NODE_NAME_DUPLICATED, pathToAssets + '/map.json', f'Map node {i["Name"]} repeated'))
-			KeyNamesRecord.availableNodes.append(i['Name'])
+			if(self.containsNode(i['Name'])): self.duplicatedNames.append(Error(ERRCODE.NODE_NAME_DUPLICATED, pathToAssets + '/map.json', f'Map node {i["Name"]} repeated'))
+			self.availableNodes.append(i['Name'])
 		#----------------------
 		return

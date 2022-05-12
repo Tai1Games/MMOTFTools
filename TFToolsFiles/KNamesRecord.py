@@ -41,6 +41,7 @@ class KeyNamesRecord:
             print("  -" + i)
 
     def checkAll(self):
+        print('Duplicates found:')
         for e in self.duplicatedNames:
             print(e.errCode, end = ' ')
             print("@" + e.file + ": " + e.message)

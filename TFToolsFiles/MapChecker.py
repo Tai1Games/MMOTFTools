@@ -87,3 +87,4 @@ def checkAll(filesFolder, keyNames):
     checkEvents(roomsList, filePath, errorList, keyNames)
     
     print(f"{len(errorList)} map errors found.")
+    return fails

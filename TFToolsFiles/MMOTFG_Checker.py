@@ -35,7 +35,12 @@ def main():
 			exit(1)
 
 		#Get list of names
-		keyNames = KeyNamesRecord(sys.argv[1])
+		try:
+			keyNames = KeyNamesRecord(sys.argv[1])
+		except Exception as e:
+			print('\033[91m'+str(e)+'\033[0m')
+			return
+
 
 		if len(sys.argv) == 2:
 			print("Running all checks...")

@@ -1,5 +1,10 @@
 {
     "Events":[
+        "OnArriveEvent",
+        "OnInspectEvent",
+        "OnExitEvent"
+    ],
+    "EventsType":[
         "eGiveItem",
         "eLearnAttack",
         "eSendAudio",
@@ -28,5 +33,31 @@
         "WAIST",
         "BACK",
         "NECK"
+    ],
+    
+    "eGiveItem":[
+        "ItemLots"
+    ],
+    "eLearnAttack":[
+        
+    ],
+    "eSendAudio":[
+        "AudioName"
+    ],
+    "eSendImage":[
+        "ImageName"
+    ],
+    "eSendImageCollection":[
+        
+    ],    
+    "eSendText":[
+        "Description"
+    ],
+    "eSetFlag":[
+        "Name",
+        "SetAs"
+    ],
+    "eStartBattle":[
+        "Enemies"
     ]
 }

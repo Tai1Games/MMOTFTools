@@ -23,14 +23,14 @@ def jsonReferences(enemyList, namesRecord):
         if "DroppedItem" in enemy:
             if not namesRecord.containsItem(enemy["DroppedItem"]):
                 fails.append(
-                    f'{enemy["Name"]}\' dropped item {enemy["DroppedItem"]} doesn\'t exist')
+                    f'"{enemy["Name"]}" dropped item "{enemy["DroppedItem"]}" doesn\'t exist')
 
         # check attacks
         if "Attacks" in enemy:
             for attack in enemy["Attacks"]:
                 if not namesRecord.containsAttack(attack):
                     fails.append(
-                        f'{enemy["Name"]}\' attack {attack} doesn\'t exist')
+                        f'"{enemy["Name"]}" attack "{attack}" doesn\'t exist')
 
         # check referenced enemies onKill
         if "OnKill" in enemy:
@@ -38,12 +38,12 @@ def jsonReferences(enemyList, namesRecord):
                 # Janky motor it looks like
                 if not namesRecord.containsEnemy(enemy["OnKill"]["Enemy"]):
                     fails.append(
-                        f'{enemy["OnKill"]["Enemy"]} referenced by {enemy["Name"]} doesn\'t exist')
+                        f'"{enemy["OnKill"]["Enemy"]}" referenced by "{enemy["Name"]}" doesn\'t exist')
             elif "Enemies" in enemy["OnKill"]:
                 for newEnemy in enemy["OnKill"]["Enemies"]:
                     if not namesRecord.containsEnemy(newEnemy):
                         fails.append(
-                            f'{newEnemy} referenced by {enemy["Name"]} doesn\'t exist')
+                            f'"{newEnemy}" referenced by "{enemy["Name"]}" doesn\'t exist')
 
     return len(fails), fails
 
@@ -110,14 +110,12 @@ def checkAll(filesFolder, namesRecord):
     print(f"Json references check errors: {res}")
 
     # Missing images
-    res, eMessages = existingImage(enemyList,filesFolder)
+    res, eMessages = existingImage(enemyList, filesFolder)
     for err in eMessages:
         errorList.append(Error(ERRCODE.ENEMY_IMAGE_MISSING,
-                         filePath, f"{err} enemy has no image"))
+                         filePath, f'"{err}" has no image'))
     print(f"Missing image check errors: {res}")
 
-    for err in errorList:
-        print(err)
     # Repeat keys
     RepeatKeysList = []
     for enemy in enemyList:

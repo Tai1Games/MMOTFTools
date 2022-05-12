@@ -1,8 +1,6 @@
 import io
 import json
-from Error import Error
-from Error import ERRCODE
-import Common
+from Error import ERRCODE, Error
 
 class KeyNamesRecord:
 	availableNodes = []

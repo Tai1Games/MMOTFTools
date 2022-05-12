@@ -32,9 +32,3 @@ def createHTML(errorDict):
 
     file.close()
 
-E = Error(ERRCODE.ENEMY_NAME_DUPLICATED, "FILE.PNG", "HOLA")
-
-errDict = {"enemigos": [E],
-            "mapa": [E,E]}
-
-createHTML(errDict)

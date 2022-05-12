@@ -67,19 +67,22 @@ def checkEvents(roomsList, filePath, errorList, keyNames):
 
 
 def checkAll(filesFolder, keyNames):
+    print(f"\nChecking Nodes...")
     errorList = list()
     filePath = filesFolder + '/mapejemplo.json'
     with io.open(filePath, encoding='utf-8-sig') as json_data:
         roomsList = json.loads(json_data.read())
     
     # Repeat keys
-    RepeatKeysList = []
+    repeatKeysLen = 0
     for node in roomsList:
         # TODO return for html
-        res, fails = Common.RepeatKeys("maps.json", node)
-        if len(fails) > 0:
-            RepeatKeysList.append(fails)
-    print(f"{len(RepeatKeysList)} repeat key errors found.")
+        res, fails = Common.RepeatKeys(filePath, node)
+        if res:
+            for err in fails:
+                errorList.append(err)
+            repeatKeysLen += len(fails)
+    print(f"Map repeat keys errors: {repeatKeysLen}")
 
 
     #Map errores
@@ -87,4 +90,4 @@ def checkAll(filesFolder, keyNames):
     checkEvents(roomsList, filePath, errorList, keyNames)
     
     print(f"{len(errorList)} map errors found.")
-    return fails
+    return errorList

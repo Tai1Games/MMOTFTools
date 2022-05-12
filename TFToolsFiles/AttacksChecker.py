@@ -26,44 +26,45 @@ def negativeValues(attacksList):
                 fails.append(
                     f'{item["Name"]} has a negative value at Multiple')
 
-    return len(fails), fails
+    return len(fails) > 0, fails
 
 
 def checkAll(filesFolder):
-    print("Checking Attacks...")
+    print("\nChecking Attacks...")
+    errorList = list()
     filePath = filesFolder + '/attacks.json'
     with io.open(filePath, encoding='utf-8-sig') as json_data:
         attacksList = json.loads(json_data.read())
-
-    errorList = []
 
     # Exist keys
     # Contains objects with the required keys
     completedAttacksList = []
     for idx, attack in enumerate(attacksList):
         # TODO return for html
-        res, eMessages = Common.ExistKeys([], ["Power", "Multiple"], attack, idx)
+        res, fails = Common.ExistKeys(filePath, [], ["Power", "Multiple"], attack, idx)
         if res > 0:
-            for err in eMessages:
-                errorList.append(Error(ERRCODE.OBJECT_KEY_MISSING, filePath, f"{err}"))
+            for err in fails:
+                errorList.append(err)
         else:
             completedAttacksList.append(attack)
     attacksList = completedAttacksList
-    print(f"Attacks missing keys check errors: {len(errorList)}")
+    print(f"Attacks missing keys errors: {len(errorList)}")
 
     # Negative values
     res, eMessages = negativeValues(attacksList)
     for err in eMessages:
         errorList.append(Error(ERRCODE.ATTACK_NEGATIVE_VALUE, filePath, f"{err}"))
-    print(f"Attacks negative values check errors: {res}")
+    print(f"Attacks negative values errors: {len(eMessages)}")
 
     # Repeat keys
-    RepeatKeysList = []
-    for attack in attacksList:
-        # TODO return for html
-        res, fails = Common.RepeatKeys(filePath, attack)
-        if len(fails) > 0:
-            RepeatKeysList.append(fails)
-    print(f"{res} repeat key errors found.")
+    # repeatKeysLen = 0
+    # for attack in attacksList:
+    #     # TODO return for html
+    #     res, fails = Common.RepeatKeys(filePath, attack)
+    #     if res:
+    #         for err in fails:
+    #             errorList.append(err)
+    #         repeatKeysLen += len(fails)
+    # print(f"Attacks repeat keys errors: {repeatKeysLen}")
     
     return errorList

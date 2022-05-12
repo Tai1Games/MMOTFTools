@@ -2,6 +2,7 @@ import json
 import io
 from Error import ERRCODE
 import Program
+import Common
 
 def checkConnectingNodes(roomsList, filePath, errorList, keyNames):
 	for room in roomsList:

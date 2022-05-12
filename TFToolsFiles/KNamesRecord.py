@@ -1,8 +1,6 @@
 import io
 import json
-import Error
-from Error import Error
-from Error import ERRCODE
+from Error import ERRCODE, Error
 
 class KeyNamesRecord:
 	availableNodes = []
@@ -13,19 +11,19 @@ class KeyNamesRecord:
 	duplicatedNames = []
 
 	def containsNode(self, n):
-		if any(n in s for s in self.availableNodes):
+		if n in self.availableNodes:
 			return True
 			
 	def containsAttack(self, a):
-		if any(a in s for s in self.availableAttacks):
+		if a in self.availableAttacks:
 			return True
 
 	def containsItem(self, i):
-		if any(i in s for s in self.availableItems):
+		if i in self.availableItems:
 			return True
 
 	def containsEnemy(self, e):
-		if any(e in s for s in self.availableEnemies):
+		if e in self.availableEnemies:
 			return True
 
 	def print(self):

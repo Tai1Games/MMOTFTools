@@ -1,6 +1,7 @@
 import json
 import io
 import os
+import Common
 from Error import ERRCODE, Error
 
 
@@ -16,10 +17,9 @@ def existingImage(path):
 
     return len(missingImages), missingImages
 
-def statSize(path):
+def statSize(enemyList):
     fails = list()
-    with io.open(path, encoding='utf-8-sig') as json_data:
-        enemyList = json.loads(json_data.read())
+
     for item in enemyList:
         try:
             if len(item["Stats"]) != 4:
@@ -34,10 +34,8 @@ def statSize(path):
 
     return len(fails), fails
 
-def attacksSize(path):
+def attacksSize(enemyList):
     fails = list()
-    with io.open(path, encoding='utf-8-sig') as json_data:
-        enemyList = json.loads(json_data.read())
 
     for item in enemyList:
         try:
@@ -53,18 +51,26 @@ def attacksSize(path):
     return len(fails), fails
 
 def checkAll(filesFolder):
-    errorList = list()
+    print(f"Checking enemies...")
     filePath = filesFolder + '/enemies.json'
-    res, eMessages = statSize(filePath)
+    with io.open(filePath, encoding='utf-8-sig') as json_data:
+        enemyList = json.loads(json_data.read())
+
+    errorList = []
+
+    # Statblock size
+    res, eMessages = statSize(enemyList)
     for err in eMessages:
         errorList.append(Error(ERRCODE.ENEMY_STAT_SIZE, filePath, f"{err}"))
     print(f"Stat size check errors: {res}")
 
-    res, eMessages = attacksSize(filePath)
+    # Attacks minimum size
+    res, eMessages = attacksSize(enemyList)
     for err in eMessages:
         errorList.append(Error(ERRCODE.ENEMY_ATTACK_SIZE, filePath, f"{err}"))
     print(f"Attacks size check errors: {res}")
 
+	#Missing images
     res, eMessages = existingImage(filePath)
     for err in eMessages:
         errorList.append(Error(ERRCODE.ENEMY_IMAGE_MISSING, filePath, f"{err} enemy has no image"))
@@ -72,3 +78,11 @@ def checkAll(filesFolder):
 
     for err in errorList:
         print(err)
+    # Repeat keys
+    RepeatKeysList = []
+    for enemy in enemyList:
+        # TODO return for html
+        res, fails = Common.RepeatKeys(filePath, enemy)
+        if len(fails) > 0:
+            RepeatKeysList.append(fails)
+    print(f"{len(RepeatKeysList)} repeat key errors found.")

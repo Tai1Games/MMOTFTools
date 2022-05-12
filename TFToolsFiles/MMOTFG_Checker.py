@@ -1,11 +1,10 @@
 import sys, os
 import getopt
 
-import KNamesRecord
 from KNamesRecord import KeyNamesRecord
-#import mapaChecker
-#import itemChecker
-import directionsChecker
+import MapChecker
+import ItemChecker
+import DirectionsChecker
 import EnemyChecker
 import AttacksChecker
 
@@ -39,12 +38,14 @@ def main():
 		keyNames = KeyNamesRecord(sys.argv[1])
 
 		if len(sys.argv) == 2:
-			directionsChecker.checkAll(sys.argv[1])
 			print("Running all checks...")
 
 			keyNames.checkAll()
-			EnemyChecker.checkAll(sys.argv[1])
+			DirectionsChecker.checkAll(sys.argv[1])
 			AttacksChecker.checkAll(sys.argv[1])
+			EnemyChecker.checkAll(sys.argv[1])
+			ItemChecker.checkAll(sys.argv[1])
+			MapChecker.checkAll(sys.argv[1])
 		else:
 			#Get all relevant arguments
 			arguments = sys.argv[2:]
@@ -55,13 +56,13 @@ def main():
 				for opt, arg in opts:
 					if opt == "-m":
 						#check maps
-						print("placeholder")
+						MapChecker.checkAll(sys.argv[1])
 					elif opt == "-i":
 						#check items
-						print("placeholder")
+						ItemChecker.checkAll(sys.argv[1])
 					elif opt == "-d":
 						#check directions
-						directionsChecker.checkAll(sys.argv[1])
+						DirectionsChecker.checkAll(sys.argv[1])
 					elif opt == "-e":
 						EnemyChecker.checkAll(sys.argv[1])
 					elif opt == "-a":

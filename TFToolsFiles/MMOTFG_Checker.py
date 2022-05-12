@@ -50,22 +50,28 @@ def main():
             print("Running all checks...")
 
             keyNamesErrors = keyNames.checkAll()
-            if len(keyNamesErrors) > 0: allErrorsDict.update({"keyNamesErrors": keyNamesErrors})
+            if len(keyNamesErrors) > 0:
+                allErrorsDict.update({"keyNamesErrors": keyNamesErrors})
 
             directionsErrors = DirectionsChecker.checkAll(sys.argv[1])
-            if len(directionsErrors) > 0: allErrorsDict.update({"directionsErrors": directionsErrors})
+            if len(directionsErrors) > 0:
+                allErrorsDict.update({"directionsErrors": directionsErrors})
 
             attacksErrors = AttacksChecker.checkAll(sys.argv[1])
-            if len(attacksErrors) > 0: allErrorsDict.update({"attacksErrors": attacksErrors})
+            if len(attacksErrors) > 0:
+                allErrorsDict.update({"attacksErrors": attacksErrors})
 
-            enemyErrors = EnemyChecker.checkAll(sys.argv[1])
-            if len(enemyErrors) > 0: allErrorsDict.update({"enemyErrors": enemyErrors})
+            enemyErrors = EnemyChecker.checkAll(sys.argv[1], keyNames)
+            if len(enemyErrors) > 0:
+                allErrorsDict.update({"enemyErrors": enemyErrors})
 
             itemErrors = ItemChecker.checkAll(sys.argv[1])
-            if len(itemErrors) > 0: allErrorsDict.update({"itemErrors": itemErrors})
+            if len(itemErrors) > 0:
+                allErrorsDict.update({"itemErrors": itemErrors})
 
             mapErrors = MapChecker.checkAll(sys.argv[1], keyNames)
-            if len(mapErrors) > 0: allErrorsDict.update({"mapErrors": mapErrors})            
+            if len(mapErrors) > 0:
+                allErrorsDict.update({"mapErrors": mapErrors})
         else:
             # Get all relevant arguments
             arguments = sys.argv[2:]
@@ -77,21 +83,30 @@ def main():
                     if opt == "-m":
                         # check maps
                         mapErrors = MapChecker.checkAll(sys.argv[1], keyNames)
-                        if len(mapErrors) > 0: allErrorsDict.update({"mapErrors": mapErrors})
+                        if len(mapErrors) > 0:
+                            allErrorsDict.update({"mapErrors": mapErrors})
                     elif opt == "-i":
                         # check items
                         itemErrors = ItemChecker.checkAll(sys.argv[1])
-                        if len(itemErrors) > 0: allErrorsDict.update({"itemErrors": itemErrors})
+                        if len(itemErrors) > 0:
+                            allErrorsDict.update({"itemErrors": itemErrors})
                     elif opt == "-d":
                         # check directions
-                        directionsErrors = DirectionsChecker.checkAll(sys.argv[1])
-                        if len(directionsErrors) > 0:  allErrorsDict.update({"directionsErrors": directionsErrors})
+                        directionsErrors = DirectionsChecker.checkAll(
+                            sys.argv[1])
+                        if len(directionsErrors) > 0:
+                            allErrorsDict.update(
+                                {"directionsErrors": directionsErrors})
                     elif opt == "-e":
-                        enemyErrors = EnemyChecker.checkAll(sys.argv[1])
-                        if len(enemyErrors) > 0: allErrorsDict.update({"enemyErrors": enemyErrors})
+                        enemyErrors = EnemyChecker.checkAll(
+                            sys.argv[1], keyNames)
+                        if len(enemyErrors) > 0:
+                            allErrorsDict.update({"enemyErrors": enemyErrors})
                     elif opt == "-a":
                         attacksErrors = AttacksChecker.checkAll(sys.argv[1])
-                        if len(attacksErrors) > 0: allErrorsDict.update({"attacksErrors": attacksErrors})
+                        if len(attacksErrors) > 0:
+                            allErrorsDict.update(
+                                {"attacksErrors": attacksErrors})
 
                     elif opt == "-h":
                         # display help

@@ -23,7 +23,7 @@ def getEngineConstants(constantsToGet):
 
 #----------------------------------------------------------
 
-with open('TFToolsFiles/EngineConstants.json', 'r') as f:
+with open('EngineConstants.json', 'r') as f:
     engine_constants = json.load(f)
 
 #if(checkEngineConstant("Cock", "GEARSLOT")): print("OUI VEGGI GUD DIS MAP")

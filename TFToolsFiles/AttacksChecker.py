@@ -61,7 +61,7 @@ def checkAll(filesFolder):
 	errorList = []
 
 	# Negative values
-	res, eMessages = negativeValues(filePath)
+	res, eMessages = negativeValues(attacksList)
 	for err in eMessages:
 		errorList.append(Error(ERRCODE.ATTACK_NEGATIVE_VALUE, filePath, f"{err}"))
 	print(f"Attacks negative values check errors: {res}")

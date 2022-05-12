@@ -18,10 +18,8 @@ def statSize(enemyList):
 
 	return len(fails), fails
 
-def attacksSize(path):
+def attacksSize(enemyList):
 	fails = list()
-	with io.open(path, encoding='utf-8-sig') as json_data:
-		enemyList = json.loads(json_data.read())
 
 	for item in enemyList:
 		try:
@@ -38,7 +36,8 @@ def attacksSize(path):
 
 def checkAll(filesFolder):
 	print(f"Checking enemies...")
-	with io.open(filesFolder +'/enemies.json', encoding='utf-8-sig') as json_data:
+	filePath = filesFolder + '/enemies.json'
+	with io.open(filePath, encoding='utf-8-sig') as json_data:
 		enemyList = json.loads(json_data.read())
 
 	errorList = []
@@ -46,20 +45,20 @@ def checkAll(filesFolder):
 	# Statblock size
 	res, eMessages = statSize(enemyList)
 	for err in eMessages:
-		errorList.append(Error(ERRCODE.ENEMY_STAT_SIZE, "enemies.json", f"{err}"))
+		errorList.append(Error(ERRCODE.ENEMY_STAT_SIZE, filePath, f"{err}"))
 	print(f"Stat size check errors: {res}")
 
 	# Attacks minimum size
 	res, eMessages = attacksSize(enemyList)
 	for err in eMessages:
-		errorList.append(Error(ERRCODE.ENEMY_ATTACK_SIZE, "enemies.json", f"{err}"))
+		errorList.append(Error(ERRCODE.ENEMY_ATTACK_SIZE, filePath, f"{err}"))
 	print(f"Attacks size check errors: {res}")
 
 	# Repeat keys
 	RepeatKeysList = []
 	for enemy in enemyList:
 		# TODO return for html
-		res, fails = Common.RepeatKeys("enemies.json", enemy)
+		res, fails = Common.RepeatKeys(filePath, enemy)
 		if len(fails) > 0:
 			RepeatKeysList.append(fails)
 	print(f"{len(RepeatKeysList)} repeat key errors found.")

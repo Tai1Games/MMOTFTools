@@ -12,4 +12,4 @@ def RepeatKeys(filename, object):
 		else:
 			knownKeys.append(key)
 
-	return len(errList) > 0, errList
+	return len(errList), errList

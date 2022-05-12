@@ -35,17 +35,16 @@ def main():
 			exit(1)
 
 		#Get list of names
-		try:
-			keyNames = KeyNamesRecord(sys.argv[1])
-		except Exception as e:
-			print('\033[91m'+str(e)+'\033[0m')
-			return
-
+		keyNames = KeyNamesRecord(sys.argv[1])
 
 		if len(sys.argv) == 2:
+
+			if(not keyNames.checkAll()):
+				print("Name errors must be fixed before proceeding")
+				return -1
+
 			print("Running all checks...")
 
-			keyNames.checkAll()
 			DirectionsChecker.checkAll(sys.argv[1])
 			AttacksChecker.checkAll(sys.argv[1])
 			EnemyChecker.checkAll(sys.argv[1])
@@ -56,7 +55,9 @@ def main():
 			arguments = sys.argv[2:]
 			try:
 				opts,args = getopt.getopt(arguments,"hmidea")
-				keyNames.checkAll()
+				if(not keyNames.checkAll()):
+					print("Name errors must be fixed before proceeding")
+					return -1
 
 				for opt, arg in opts:
 					if opt == "-m":

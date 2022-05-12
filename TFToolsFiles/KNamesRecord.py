@@ -8,6 +8,7 @@ class KeyNamesRecord:
     availableItems = []
     availableEnemies = []
     #-----------------------
+    missingNames = []
     duplicatedNames = []
 
     def containsNode(self, n):
@@ -41,10 +42,15 @@ class KeyNamesRecord:
             print("  -" + i)
 
     def checkAll(self):
+        print('\033[91m')
+        for e in self.missingNames: 
+            print(e.errCode, end = ' ')
+            print("@" + e.file + ": " + e.message)
         for e in self.duplicatedNames: 
             print(e.errCode, end = ' ')
             print("@" + e.file + ": " + e.message)
-        return self.duplicatedNames
+        print('\033[0m')
+        return len(self.missingNames) == 0 and len(self.duplicatedNames) == 0
 
     def __init__(self, pathToAssets):
         #---------------------
@@ -54,11 +60,10 @@ class KeyNamesRecord:
         
         for idx, i in enumerate(itemData):
             try:
-                i['Name']
+                if(self.containsItem(i['Name'])): self.duplicatedNames.append(Error(ERRCODE.ITEM_NAME_DUPLICATED, pathToAssets + '/items.json', f'Item {i["Name"]} repeated'))
+                self.availableItems.append(i['Name'])
             except KeyError:
-                raise Exception(f'Missing key Name from Items file at Item {idx}')
-            if(self.containsItem(i['Name'])): self.duplicatedNames.append(Error(ERRCODE.ITEM_NAME_DUPLICATED, pathToAssets + '/items.json', f'Item {i["Name"]} repeated'))
-            self.availableItems.append(i['Name'])
+                self.missingNames.append(Error(ERRCODE.ITEM_NAME_MISSING, pathToAssets + '/items.json', f'Missing key Name from Items file at Item object {idx}'))
         #--------------------
         #ataques
         with io.open(pathToAssets+'/attacks.json', encoding='utf-8-sig') as json_data:
@@ -66,11 +71,10 @@ class KeyNamesRecord:
 
         for idx, i in enumerate(attackData):
             try:
-                i['Name']
+                if(self.containsAttack(i['Name'])): self.duplicatedNames.append(Error(ERRCODE.ATTACK_NAME_DUPLICATED, pathToAssets + '/attacks.json', f'Attack {i["Name"]} repeated'))
+                self.availableAttacks.append(i['Name'])
             except KeyError:
-                raise Exception(f'Missing key Name from Attacks file at Attack {idx}')
-            if(self.containsAttack(i['Name'])): self.duplicatedNames.append(Error(ERRCODE.ATTACK_NAME_DUPLICATED, pathToAssets + '/attacks.json', f'Attack {i["Name"]} repeated'))
-            self.availableAttacks.append(i['Name'])
+                self.missingNames.append(Error(ERRCODE.ATTACK_NAME_MISSING, pathToAssets + '/items.json', f'Missing key Name from Attacks file at Attack object {idx}'))
         #--------------------
         #enemigos
         with io.open(pathToAssets+'/enemies.json', encoding='utf-8-sig') as json_data:
@@ -78,11 +82,10 @@ class KeyNamesRecord:
 
         for idx, i in enumerate(enemyData):
             try:
-                i['Name']
+                if(self.containsEnemy(i['Name'])): self.duplicatedNames.append(Error(ERRCODE.ENEMY_NAME_DUPLICATED, pathToAssets + '/enemies.json', f'Enemy {i["Name"]} repeated'))
+                self.availableEnemies.append(i['Name'])
             except KeyError:
-                raise Exception(f'Missing key Name from Enemies file at Enemy {idx}')
-            if(self.containsEnemy(i['Name'])): self.duplicatedNames.append(Error(ERRCODE.ENEMY_NAME_DUPLICATED, pathToAssets + '/enemies.json', f'Enemy {i["Name"]} repeated'))
-            self.availableEnemies.append(i['Name'])
+                self.missingNames.append(Error(ERRCODE.ENEMY_NAME_MISSING, pathToAssets + '/items.json', f'Missing key Name from Enemies file at Enemy object {idx}'))
         #--------------------
         #nodos
         with io.open(pathToAssets+'/map.json', encoding='utf-8-sig') as json_data:
@@ -90,10 +93,9 @@ class KeyNamesRecord:
 
         for idx, i in enumerate(mapData):
             try:
-                i['Name']
+                if(self.containsNode(i['Name'])): self.duplicatedNames.append(Error(ERRCODE.NODE_NAME_DUPLICATED, pathToAssets + '/map.json', f'Map node {i["Name"]} repeated'))
+                self.availableNodes.append(i['Name'])
             except KeyError:
-                raise Exception(f'Missing key Name from Map file at Node {idx}')
-            if(self.containsNode(i['Name'])): self.duplicatedNames.append(Error(ERRCODE.NODE_NAME_DUPLICATED, pathToAssets + '/map.json', f'Map node {i["Name"]} repeated'))
-            self.availableNodes.append(i['Name'])
+                self.missingNames.append(Error(ERRCODE.NODE_NAME_MISSING, pathToAssets + '/items.json', f'Missing key Name from Map file at Node object {idx}'))
         #----------------------
         return

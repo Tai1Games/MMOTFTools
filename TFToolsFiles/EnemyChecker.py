@@ -126,3 +126,5 @@ def checkAll(filesFolder, namesRecord):
         if len(fails) > 0:
             RepeatKeysList.append(fails)
     print(f"{len(RepeatKeysList)} repeat key errors found.")
+
+    return errorList

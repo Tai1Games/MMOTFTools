@@ -1,7 +1,7 @@
 ﻿[
   {
     "Name": "Manuela",
-    "Stats": [ 100, 10, 15, 25 ],
+    "Stats": [ 100, 10, 25 ],
     "ImageName": "manuela.jpg",
     "ImageCaption": "Manuela ataca!",
     "DroppedMoney": 100,
@@ -38,7 +38,7 @@
     "DroppedMoney": 2223,
     "DroppedItem": "mana_potion",
     "DroppedItemAmount": 2,
-    "Attacks": [ "Chiste sobre javascript", "El PCE es maravilloso", "No Fucking Thanks" ],
+    "Attacks": [],
     "OnHit": {
       "BehaviourType": "bChangeStat",
       "StatToChange": "ATK",
@@ -83,7 +83,6 @@
     "DroppedMoney": 6969,
     "DroppedItem": "health_potion",
     "DroppedItemAmount": 2,
-    "Attacks": [ "Latigazo correa", "Plástico sospechoso" ],
     "OnHit": {
       "BehaviourType": "bChangeStat",
       "StatToChange": "ATK",

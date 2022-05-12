@@ -1,7 +1,7 @@
 import json
 import io
 import Common
-
+from Error import ERRCODE, Error
 
 def negativeValues(attacksList):
 	fails = list()
@@ -54,20 +54,23 @@ def negativeValues(attacksList):
 
 def checkAll(filesFolder):
 	print("Checking Attacks...")
-	with io.open(filesFolder + '/attacks.json', encoding='utf-8-sig') as json_data:
+	filePath = filesFolder + '/attacks.json'
+	with io.open(filePath, encoding='utf-8-sig') as json_data:
 		attacksList = json.loads(json_data.read())
 
-	# Negative values
-	res, fails = negativeValues(attacksList)
+	errorList = []
 
+	# Negative values
+	res, eMessages = negativeValues(filePath)
+	for err in eMessages:
+		errorList.append(Error(ERRCODE.ATTACK_NEGATIVE_VALUE, filePath, f"{err}"))
 	print(f"Attacks negative values check errors: {res}")
-	print(fails)
 
 	# Repeat keys
 	RepeatKeysList = []
 	for attack in attacksList:
 		# TODO return for html
-		res, fails = Common.RepeatKeys("attacks.json", attack)
+		res, fails = Common.RepeatKeys(filePath, attack)
 		if len(fails) > 0:
 			RepeatKeysList.append(fails)
-	print(f"{len(RepeatKeysList)} repeat key errors found.")
+	print(f"{res} repeat key errors found.")

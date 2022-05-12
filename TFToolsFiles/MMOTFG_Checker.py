@@ -56,7 +56,7 @@ def main():
 				for opt, arg in opts:
 					if opt == "-m":
 						#check maps
-						print("placeholder")
+						MapChecker.checkAll(sys.argv[1], keyNames)
 					elif opt == "-i":
 						#check items
 						print("placeholder")

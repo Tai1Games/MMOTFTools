@@ -39,18 +39,18 @@ def checkAll(filesFolder):
     errorList = []
 
     # Exist keys
-    ExistKeysList = []
     # Contains objects with the required keys
     completedEnemiesList = []
-    for enemy in enemyList:
+    for idx, enemy in enumerate(enemyList):
         # TODO return for html
-        res, fails = Common.ExistKeys(filePath, ["Stats", "Attacks", "ImageName"], [], enemy)
+        res, eMessages = Common.ExistKeys(["Stats", "Attacks", "ImageName"], [], enemy, idx)
         if res > 0:
-            ExistKeysList.append(fails)
+            for err in eMessages:
+                errorList.append(Error(ERRCODE.OBJECT_KEY_MISSING, filePath, f"{err}"))
         else:
             completedEnemiesList.append(enemy)
     enemyList = completedEnemiesList
-    print(f"Enemies missing keys check errors: {len(ExistKeysList)}")
+    print(f"Enemies missing keys check errors: {len(errorList)}")
 
     # Statblock size
     res, eMessages = statSize(enemyList)

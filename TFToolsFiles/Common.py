@@ -14,17 +14,16 @@ def RepeatKeys(filename, object):
 
 	return len(errList), errList
 
-def ExistKeys(filename, obligatoryKeys, atLeastOneKeys, object):
+def ExistKeys(obligatoryKeys, atLeastOneKeys, object, idx):
 	errList = []
 
 	for key in obligatoryKeys:
 		if key not in object:
-			errList.append(Error(ERRCODE.OBJECT_KEY_MISSING, filename,
-								 f"Missing obligatory key {key} in object named {object['Name']}"))
+			errList.append(f"Missing obligatory key {key} at object {idx}")
 
-	result = any(elem in object for elem in atLeastOneKeys)
-	if(not result):
-		errList.append(Error(ERRCODE.OBJECT_KEY_MISSING, filename,
-								 f"At least one key {atLeastOneKeys} in object named {object['Name']} is required"))
+	if len(atLeastOneKeys)>0:
+		result = any(elem in object for elem in atLeastOneKeys)
+		if(not result):
+			errList.append(f"At least one key {atLeastOneKeys} at object {idx} is required")
 
 	return len(errList), errList

@@ -38,18 +38,18 @@ def checkAll(filesFolder):
     errorList = []
 
     # Exist keys
-    ExistKeysList = []
     # Contains objects with the required keys
     completedAttacksList = []
-    for attack in attacksList:
+    for idx, attack in enumerate(attacksList):
         # TODO return for html
-        res, fails = Common.ExistKeys(filePath, [], ["Power", "Multiple"], attack)
+        res, eMessages = Common.ExistKeys([], ["Power", "Multiple"], attack, idx)
         if res > 0:
-            ExistKeysList.append(fails)
+            for err in eMessages:
+                errorList.append(Error(ERRCODE.OBJECT_KEY_MISSING, filePath, f"{err}"))
         else:
             completedAttacksList.append(attack)
     attacksList = completedAttacksList
-    print(f"Attacks missing keys check errors: {len(ExistKeysList)}")
+    print(f"Attacks missing keys check errors: {len(errorList)}")
 
     # Negative values
     res, eMessages = negativeValues(attacksList)

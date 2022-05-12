@@ -51,18 +51,18 @@ def checkAll(folder):
         directionsList = json.loads(json_data.read())
 
     # Exist keys
-    ExistKeysList = []
     # Contains objects with the required keys
     completedDirectionsList = []
-    for dir in directionsList:
+    for idx, dir in enumerate(directionsList):
         # TODO return for html
-        res, fails = Common.ExistKeys(filePath, ["Direction", "Synonyms"], [], dir)
+        res, eMessages = Common.ExistKeys(["Direction", "Synonyms"], [], dir, idx)
         if res > 0:
-            ExistKeysList.append(fails)
+            for err in eMessages:
+                errorList.append(Error(ERRCODE.OBJECT_KEY_MISSING, filePath, f"{err}"))
         else:
             completedDirectionsList.append(dir)
     directionsList = completedDirectionsList
-    print(f"Direction missing keys check errors: {len(ExistKeysList)}")
+    print(f"Direction missing keys check errors: {len(errorList)}")
 
     matrix = synonymsMatrix(directionsList)
     #Repeated direction
@@ -73,7 +73,7 @@ def checkAll(folder):
     #Repeated alias
     res, repeats = testSynonyms(matrix)
     for k, v in repeats.items():
-        errorList.append((Error.ERRCODE.DIR_REPEATED_SYNONYM, filePath,
+        errorList.append((ERRCODE.DIR_REPEATED_SYNONYM, filePath,
                           f"{k} repeated in {v}"))
     for err in errorList:
         print(err)

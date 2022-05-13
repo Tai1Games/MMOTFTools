@@ -12,8 +12,9 @@ def RepeatKeys(filename, object):
         else:
             knownKeys.append(key)
 
-    return len(errList), errList
+    return len(errList) > 0, errList
 
+# The object must include all the keys from obligatoryKeys and at least one key from atLeastOneKeys
 def ExistKeys(filename, obligatoryKeys, atLeastOneKeys, object, idx):
     errList = []
 
@@ -22,10 +23,10 @@ def ExistKeys(filename, obligatoryKeys, atLeastOneKeys, object, idx):
             errList.append(Error(ERRCODE.OBJECT_KEY_MISSING, filename, 
                                 f"Missing obligatory key {key} at object {idx}"))
 
-    if len(atLeastOneKeys)>0:
+    if len(atLeastOneKeys) > 0:
         result = any(elem in object for elem in atLeastOneKeys)
         if(not result):
             errList.append(Error(ERRCODE.OBJECT_KEY_MISSING, filename, 
                                 f"At least one key {atLeastOneKeys} at object {idx} is required"))
 
-    return len(errList), errList
+    return len(errList) > 0, errList

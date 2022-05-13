@@ -42,7 +42,7 @@ def checkAll(filesFolder):
     for idx, attack in enumerate(attacksList):
         # TODO return for html
         res, fails = Common.ExistKeys(filePath, [], ["Power", "Multiple"], attack, idx)
-        if res > 0:
+        if res:
             for err in fails:
                 errorList.append(err)
         else:

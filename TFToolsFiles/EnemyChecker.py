@@ -81,7 +81,7 @@ def checkAll(filesFolder, namesRecord):
     for idx, enemy in enumerate(enemyList):
         # TODO return for html
         res, eMessages = Common.ExistKeys(filePath, ["Stats", "Attacks", "ImageName"], [], enemy, idx)
-        if res > 0:
+        if res:
             for err in eMessages:
                 errorList.append(Error(ERRCODE.OBJECT_KEY_MISSING, filePath, f"{err}"))
         else:
@@ -112,7 +112,7 @@ def checkAll(filesFolder, namesRecord):
     for err in eMessages:
         errorList.append(Error(ERRCODE.ENEMY_IMAGE_MISSING,
                         filePath, f'"{err}" has no image'))
-    print(f"Enemies missing image check errors: {len(eMessages)}")
+    print(f"Enemies missing image errors: {len(eMessages)}")
 
     # Repeat keys
     # repeatKeysLen = 0

@@ -50,7 +50,6 @@ def checkAll(folder):
     errorList = list()
     # TODO loop throug all files named directionSynonyms_*.json
     filePath = folder+'/directionSynonyms.json'
-
     with io.open(filePath, encoding='utf-8-sig') as json_data:
         directionsList = json.loads(json_data.read())
 
@@ -60,7 +59,7 @@ def checkAll(folder):
     for idx, dir in enumerate(directionsList):
         # TODO return for html
         res, fails = Common.ExistKeys(filePath, ["Direction", "Synonyms"], [], dir, idx)
-        if res > 0:
+        if res:
             for err in fails:
                 errorList.append(err)
         else:
@@ -75,6 +74,7 @@ def checkAll(folder):
         errorList.append(Error(ERRCODE.DIR_REPEATED_DIRECTION, filePath,
                             f"{error} direction is duplicate"))
     print(f"Directions repeated direction errors: {len(repeats)}")
+    
     # Repeated alias
     res, repeats = testSynonyms(matrix)
     for k, v in repeats.items():

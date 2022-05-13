@@ -84,10 +84,9 @@ def checkAll(filesFolder, keyNames):
             repeatKeysLen += len(fails)
     print(f"Map repeat keys errors: {repeatKeysLen}")
 
-
-    #Map errores
+    #Map errors
     checkConnectingNodes(roomsList, filePath, errorList, keyNames)
     checkEvents(roomsList, filePath, errorList, keyNames)
-    
-    print(f"{len(errorList)} map errors found.")
+    print(f"Map connecting nodes and events errors found: {len(errorList) - repeatKeysLen}")
+
     return errorList

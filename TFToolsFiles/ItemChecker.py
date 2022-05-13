@@ -73,7 +73,33 @@ def checkKeyWords(itemList, filePath, errorList):
                         errorList.append(Error(ERRCODE.ITEM_KEY_REPEATED, filePath+'/items.json',
                            f"{item['Key_Words'][j]['Key']} key is repeated"))
 
-    return
+
+
+def checkUsableItemReferences(item, filePath, errorList):    
+    for key in item['Key_Words']:
+        if(Program.checkEngineConstant(key['Value']['StatToChange'], "STAT") != True):
+            errorList.append(Error(ERRCODE.ITEM_UNKNOWN_STAT, filePath+'/items.json',
+                f"{key['Value']['StatToChange']} unknown stat"))
+
+
+def checkEquipableItemReferences(item, filePath, errorList):
+    if(Program.checkEngineConstant(item['GearSlot'], "GEARSLOT") != True):
+        errorList.append(Error(ERRCODE.ITEM_UNKNOWN_GEARSLOT, filePath+'/items.json',
+            f"{item['GearSlot']} unknown gear slot"))
+    
+    for stat in item['StatModifiers']:
+        if(Program.checkEngineConstant(stat, "STAT") != True):
+            errorList.append(Error(ERRCODE.ITEM_UNKNOWN_STAT, filePath+'/items.json',
+                f"{stat} unknown stat"))
+
+
+def checkEngineItemsReferences(itemList, filePath, errorList):
+    for item in itemList:
+        if('Key_Words' in item):
+            checkUsableItemReferences(item, filePath, errorList)
+        else: 
+            checkEquipableItemReferences(item, filePath, errorList)
+
 
 def checkAll(filesFolder, keyNames):
     print(f"Checking items...")
@@ -84,6 +110,7 @@ def checkAll(filesFolder, keyNames):
     errorList = []
     checkItemReferences(itemList, filesFolder, errorList, keyNames)
     checkKeyWords(itemList, filePath, errorList)
+    checkEngineItemsReferences(itemList, filePath, errorList)
 
     print(f"{len(errorList)} items errors found.")
 

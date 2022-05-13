@@ -76,7 +76,9 @@
       "AffectsSelf",
       "StatToScale",
       "StatToChange",
-      "Multiple"
+      "Multiple",
+      "Change",
+      "AttackType"
     ],
     "Object": [
       "MaxStackQuantity",
@@ -98,7 +100,8 @@
       "DroppedItemAmount",
       "ExperienceGiven",
       "ImageCaption",
-      "OnTurnEnd"
+      "OnTurnEnd",
+      "ImageName"
     ],
     "Maps": [
       "NodeConnections",

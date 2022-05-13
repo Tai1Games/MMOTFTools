@@ -1,5 +1,7 @@
+import os
 from tabnanny import check
 import Common, io, json
+from Error import ERRCODE, Error
 
 def checkItemsKeys(itemList, filePath):
     fails = list()
@@ -32,21 +34,6 @@ def checkItemsKeys(itemList, filePath):
         if validItem: completedItemsList.append(item)
 
     return len(fails) > 0, fails, completedItemsList
-
-def checkAll(filesFolder):
-    print(f"\nChecking Items...")
-    errorList = list()
-    filePath = filesFolder + '/items.json'
-    with io.open(filePath, encoding='utf-8-sig') as json_data:
-        itemList = json.loads(json_data.read())
-
-    # Exist keys
-    res, fails, newList = checkItemsKeys(itemList, filePath)
-    if res: itemList = newList
-    for err in fails:
-        print(err.message)
-        errorList.append(err)
-    print(f"Items missing keys errors: {len(fails)}")
 
 def checkEnemies(event, filePath, errorList, keyNames):
     event = event[0]
@@ -105,18 +92,25 @@ def checkItemReferences(itemList, filePath, errorList, keyNames):
             checkEventReferences(item['OnEquipEvents'], filePath, errorList, keyNames)
         if('OnUnequipEvents' in item):
             checkEventReferences(item['OnUnequipEvents'], filePath, errorList, keyNames)
-            
-
 
 def checkAll(filesFolder, keyNames):
     print(f"Checking items...")
+    errorList = list()
     filePath = filesFolder +'/items.json'
     with io.open(filePath, encoding='utf-8-sig') as json_data:
         itemList = json.loads(json_data.read())
 
-    errorList = []
-    checkItemReferences(itemList, filesFolder, errorList, keyNames)
+    # Exist keys
+    res, fails, newList = checkItemsKeys(itemList, filePath)
+    if res: itemList = newList
+    for err in fails:
+        errorList.append(err)
+    print(f"Items missing keys errors: {len(fails)}")
 
-    print(f"{len(errorList)} items errors found.")
+    fails = []
+    checkItemReferences(itemList, filesFolder, fails, keyNames)
+    for err in fails:
+        errorList.append(err)
+    print(f"Items reference errors: {len(fails)}")
 
     return errorList

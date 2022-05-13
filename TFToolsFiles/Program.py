@@ -16,6 +16,9 @@ def checkEngineConstant(constToCheck, type):
     elif(type == 'ATTACKTYPE'):
         if any(constToCheck in s for s in engine_constants['AttackTypes']):
              return True
+    elif(type == 'BEHAVIOUR'):
+        if any(constToCheck in s for s in engine_constants['BehaviourType']):
+             return True
     return False
 
 def getEngineConstants(constantsToGet):
@@ -26,7 +29,7 @@ def getEngineConstants(constantsToGet):
 
 #----------------------------------------------------------
 
-with open('TFToolsFiles/EngineConstants.json', 'r') as f:
+with open('./EngineConstants.json', 'r') as f:
     engine_constants = json.load(f)
 
 #if(checkEngineConstant("Cock", "GEARSLOT")): print("OUI VEGGI GUD DIS MAP")

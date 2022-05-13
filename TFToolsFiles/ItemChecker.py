@@ -2,6 +2,7 @@ import os
 from tabnanny import check
 import Common, io, json
 from Error import ERRCODE, Error
+import Program
 
 def checkItemsKeys(itemList, filePath):
     fails = list()
@@ -92,13 +93,42 @@ def checkItemReferences(itemList, filePath, errorList, keyNames):
             checkEventReferences(item['OnEquipEvents'], filePath, errorList, keyNames)
         if('OnUnequipEvents' in item):
             checkEventReferences(item['OnUnequipEvents'], filePath, errorList, keyNames)
+            
+
+def checkUsableItemReferences(item, filePath, errorList):    
+    for key in item['Key_Words']:
+        if(Program.checkEngineConstant(key['Value']['StatToChange'], "STAT") != True):
+            errorList.append(Error(ERRCODE.ITEM_UNKNOWN_STAT, filePath+'/items.json',
+                f"{key['Value']['StatToChange']} unknown stat"))
+        if(Program.checkEngineConstant(key['Value']['BehaviourType'], "BEHAVIOUR") != True):
+            errorList.append(Error(ERRCODE.ITEM_UNKNOWN_BEHAVIOUR, filePath+'/items.json',
+                f"{key['Value']['BehaviourType']} unknown behaviour"))
+
+def checkEquipableItemReferences(item, filePath, errorList):
+    if(Program.checkEngineConstant(item['GearSlot'], "GEARSLOT") != True):
+        errorList.append(Error(ERRCODE.ITEM_UNKNOWN_GEARSLOT, filePath+'/items.json',
+            f"{item['GearSlot']} unknown gear slot"))
+    
+    for stat in item['StatModifiers']:
+        if(Program.checkEngineConstant(stat, "STAT") != True):
+            errorList.append(Error(ERRCODE.ITEM_UNKNOWN_STAT, filePath+'/items.json',
+                f"{stat} unknown stat"))
+
+
+def checkEngineItemsReferences(itemList, filePath, errorList):
+    for item in itemList:
+        if('Key_Words' in item):
+            checkUsableItemReferences(item, filePath, errorList)
+        else: 
+            checkEquipableItemReferences(item, filePath, errorList)
+
 
 def checkAll(filesFolder, keyNames):
     print(f"Checking items...")
-    errorList = list()
     filePath = filesFolder +'/items.json'
     with io.open(filePath, encoding='utf-8-sig') as json_data:
         itemList = json.loads(json_data.read())
+    errorList = []
 
     # Exist keys
     res, fails, newList = checkItemsKeys(itemList, filePath)
@@ -106,6 +136,9 @@ def checkAll(filesFolder, keyNames):
     for err in fails:
         errorList.append(err)
     print(f"Items missing keys errors: {len(fails)}")
+
+    checkItemReferences(itemList, filesFolder, errorList, keyNames)
+    checkEngineItemsReferences(itemList, filePath, errorList)
 
     fails = []
     checkItemReferences(itemList, filesFolder, fails, keyNames)

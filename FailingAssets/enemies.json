@@ -13,7 +13,7 @@
       "BehaviourType": "bChangeStat",
       "StatToChange": "ATK",
       "Multiple": 2,
-      "StatToDepend": "HP",
+      "StatToDepend": "NOTASTAT",
       "Threshold": 0.5,
       "Message": "Manuela se ha enfadado! Sus ataques harán más daño."
     },
@@ -41,7 +41,7 @@
     "Attacks": [ "Chiste sobre javascripte", "El PCE es maravilloso", "No Fucking Thanks" ],
     "OnHit": {
       "BehaviourType": "bChangeStat",
-      "StatToChange": "ATK",
+      "StatToChange": "NOTASTAT",
       "Change": -1,
       "Chance": 0.5,
       "Message": "Cleon y el mono se debaten sobre si deberían matarte o no. Su ataque baja un poco."

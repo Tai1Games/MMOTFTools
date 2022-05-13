@@ -21,6 +21,13 @@ def checkEngineConstant(constToCheck, type):
              return True
     return False
 
+def isFieldValid(fieldToCheck, type):
+    try:
+        return fieldToCheck in engine_constants["PossibleFields"][type]\
+               or fieldToCheck in engine_constants["PossibleFields"]["Common"]
+    except:
+        return False
+
 def getEngineConstants(constantsToGet):
     if(constantsToGet == "EVENTS"):
         return engine_constants['Events']

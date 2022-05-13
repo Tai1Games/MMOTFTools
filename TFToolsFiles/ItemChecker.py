@@ -122,6 +122,13 @@ def checkEngineItemsReferences(itemList, filePath, errorList):
         else: 
             checkEquipableItemReferences(item, filePath, errorList)
 
+def checkInvalidFields(itemList):
+    invalidFields = dict()
+    for item in itemList:
+        inv = [i for i in item.keys() if not Program.isFieldValid(i, "Object")]
+        if len(inv) > 0:
+            invalidFields[item["Name"]] = inv
+    return len(invalidFields) > 0, invalidFields
 
 def checkAll(filesFolder, keyNames):
     print(f"Checking items...")
@@ -145,5 +152,12 @@ def checkAll(filesFolder, keyNames):
     for err in fails:
         errorList.append(err)
     print(f"Items missing reference errors: {len(fails)}")
+
+    # Items with extra keys
+    res, eMessages = checkInvalidFields(itemList)
+    for k, v in eMessages.items():
+        errorList.append(Error(ERRCODE.COMMON_INVALID_FIELD,
+                        filePath, f'"{k}" has invalid fields {v}'))
+    print(f"Item with invalid fields: {len(eMessages)}")
 
     return errorList

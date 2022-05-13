@@ -3,7 +3,7 @@ import io
 import Common
 from Error import ERRCODE, Error
 from KNamesRecord import KeyNamesRecord
-from Program import checkEngineConstant
+from Program import checkEngineConstant, isFieldValid
 
 
 def negativeValues(attacksList):
@@ -92,7 +92,7 @@ def checkAttacksKeys(attacksList, filePath):
                     for err in errors:
                         fails.append(err)
             elif attack["AttackType"] == "aStatChanging":
-                res, errors = Common.ExistKeys(filePath, ["StatToChange"], ["Multiple","Change"], attack, idx)
+                res, errors = Common.ExistKeys(filePath, ["StatToChange"], ["Multiple", "Change"], attack, idx)
                 if res:
                     validAttack = False
                     for err in errors:
@@ -103,6 +103,14 @@ def checkAttacksKeys(attacksList, filePath):
         if validAttack: completedAttacksList.append(attack)
 
     return len(fails) > 0, fails, completedAttacksList
+
+def checkInvalidFields(attackList):
+    invalidFields = dict()
+    for attack in attackList:
+        inv = [i for i in attack.keys() if not isFieldValid(i, "Attack")]
+        if len(inv) > 0:
+            invalidFields[attack["Name"]] = inv
+    return len(invalidFields) > 0, invalidFields
 
 def checkAll(filesFolder):
     print("\nChecking Attacks...")
@@ -123,6 +131,13 @@ def checkAll(filesFolder):
     for err in eMessages:
         errorList.append(Error(ERRCODE.ATTACK_NEGATIVE_VALUE, filePath, f"{err}"))
     print(f"Attacks negative values errors: {len(eMessages)}")
+
+    # Enemies with extra keys
+    res, eMessages = checkInvalidFields(attacksList)
+    for k, v in eMessages.items():
+        errorList.append(Error(ERRCODE.COMMON_INVALID_FIELD,
+                        filePath, f'"{k}" has invalid fields {v}'))
+    print(f"Attacks with invalid fields: {len(eMessages)}")
 
     # Repeat keys
     # repeatKeysLen = 0

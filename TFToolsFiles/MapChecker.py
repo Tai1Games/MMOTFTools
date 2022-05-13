@@ -65,14 +65,52 @@ def checkEvents(roomsList, filePath, errorList, keyNames):
             if(event in room):
                 checkEventType(room[event], filePath, errorList, keyNames)
 
+def checkMapKeys(roomsList, filePath):
+    fails = list()
+
+    # Contains objects with the required keys
+    completedRoomsList = []
+
+    for idx, room in enumerate(roomsList):
+        validRoom = True
+        res, errors = Common.ExistKeys(filePath, ["NodeConnections"], [], room, idx)
+        if res:
+            validRoom = False
+            for err in errors:
+                fails.append(err)
+        else:
+            nodeConnections = room['NodeConnections']
+            for connection in nodeConnections:
+                res, errors = Common.ExistKeys(filePath, ["ConnectingNode"], [], nodeConnections[connection], idx)
+                if res:
+                    validRoom = False
+                    for err in errors:
+                        fails.append(err)
+
+        res, errors = Common.ExistKeysOnEvents(filePath, ["OnArriveEvent","OnExitEvent","OnInspectEvent"], room, idx)
+        if res:
+            validRoom = False
+            for err in errors:
+                fails.append(err)
+        
+        if validRoom: completedRoomsList.append(room)
+                    
+    return len(fails) > 0, fails, completedRoomsList
 
 def checkAll(filesFolder, keyNames):
-    print(f"\nChecking Nodes...")
+    print(f"\nChecking Map and Nodes...")
     errorList = list()
     filePath = filesFolder + '/mapejemplo.json'
     with io.open(filePath, encoding='utf-8-sig') as json_data:
         roomsList = json.loads(json_data.read())
-    
+
+    # Exist keys
+    res, fails, newList = checkMapKeys(roomsList, filePath)
+    if res: roomsList = newList
+    for err in fails:
+        errorList.append(err)
+    print(f"Map missing keys errors: {len(fails)}")
+
     # Repeat keys
     repeatKeysLen = 0
     for node in roomsList:

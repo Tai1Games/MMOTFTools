@@ -10,14 +10,6 @@ def negativeValues(attacksList):
     fails = list()
 
     for item in attacksList:
-        try:
-            # Negative value for MpCost
-            if item["MpCost"] < 0:
-                fails.append(
-                    f'{item["Name"]} has a negative value at MpCost')
-        except KeyError:
-            # MpCost field is not required
-            pass
 
         try:
             # Negative value for Power
@@ -25,9 +17,31 @@ def negativeValues(attacksList):
                 fails.append(
                     f'{item["Name"]} has a negative value at Power')
         except KeyError:
+            pass
+
+        try:
+            # Negative value for MpCost
+            if item["MpCost"] < 0:
+                fails.append(
+                    f'{item["Name"]} has a negative value at MpCost')
+        except KeyError:
+            pass
+
+        try:
+            # Negative value for Multiple
             if item["Multiple"] < 0:
                 fails.append(
                     f'{item["Name"]} has a negative value at Multiple')
+        except KeyError:
+            pass
+
+        try:
+            # Negative value for FixedDamage
+            if item["FixedDamage"] < 0:
+                fails.append(
+                    f'{item["Name"]} has a negative value at FixedDamage')
+        except KeyError:
+            pass
 
     return len(fails) > 0, fails
 
@@ -62,6 +76,34 @@ def checkReferences(attacksList):
 
     return len(fails) > 0, fails
 
+def checkAttacksKeys(attacksList, filePath):
+    fails = list()
+
+    # Contains objects with the required keys
+    completedAttacksList = []
+
+    for idx, attack in enumerate(attacksList):
+        validAttack = True
+        try:
+            if attack["AttackType"] == "aScaled":
+                res, errors = Common.ExistKeys(filePath, ["StatToScale"], [], attack, idx)
+                if res:
+                    validAttack = False
+                    for err in errors:
+                        fails.append(err)
+            elif attack["AttackType"] == "aStatChanging":
+                res, errors = Common.ExistKeys(filePath, ["StatToChange"], ["Multiple","Change"], attack, idx)
+                if res:
+                    validAttack = False
+                    for err in errors:
+                        fails.append(err)
+        except KeyError:
+            pass
+
+        if validAttack: completedAttacksList.append(attack)
+
+    return len(fails) > 0, fails, completedAttacksList
+
 def checkAll(filesFolder):
     print("\nChecking Attacks...")
     errorList = list()
@@ -70,18 +112,11 @@ def checkAll(filesFolder):
         attacksList = json.loads(json_data.read())
 
     # Exist keys
-    # Contains objects with the required keys
-    completedAttacksList = []
-    for idx, attack in enumerate(attacksList):
-        # TODO return for html
-        res, fails = Common.ExistKeys(filePath, [], ["Power", "Multiple"], attack, idx)
-        if res:
-            for err in fails:
-                errorList.append(err)
-        else:
-            completedAttacksList.append(attack)
-    attacksList = completedAttacksList
-    print(f"Attacks missing keys errors: {len(errorList)}")
+    res, fails, newList = checkAttacksKeys(attacksList, filePath)
+    if res: attacksList = newList
+    for err in fails:
+        errorList.append(err)
+    print(f"Attacks missing keys errors: {len(fails)}")
 
     # Negative values
     res, eMessages = negativeValues(attacksList)

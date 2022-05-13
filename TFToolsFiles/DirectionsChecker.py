@@ -44,6 +44,23 @@ def synonymsMatrix(directionsData):
 
     return matrix
 
+def checkDirectionsKeys(directions, filePath):
+    fails = list()
+
+    # Contains objects with the required keys
+    completedDirectionsList = []
+
+    for idx, dir in enumerate(directions):
+        validDir = True
+        res, errors = Common.ExistKeys(filePath, ["Direction","Synonyms"], [], dir, idx)
+        if res:
+            validDir = False
+            for err in errors:
+                fails.append(err)
+
+        if validDir: completedDirectionsList.append(dir)
+    
+    return len(fails) > 0, fails, completedDirectionsList
 
 def checkAll(folder):
     print("\nChecking Directions...")
@@ -54,18 +71,11 @@ def checkAll(folder):
         directionsList = json.loads(json_data.read())
 
     # Exist keys
-    # Contains objects with the required keys
-    completedDirectionsList = []
-    for idx, dir in enumerate(directionsList):
-        # TODO return for html
-        res, fails = Common.ExistKeys(filePath, ["Direction", "Synonyms"], [], dir, idx)
-        if res:
-            for err in fails:
-                errorList.append(err)
-        else:
-            completedDirectionsList.append(dir)
-    directionsList = completedDirectionsList
-    print(f"Directions missing keys errors: {len(errorList)}")
+    res, fails, newList = checkDirectionsKeys(directionsList, filePath)
+    if res: directionsList = newList
+    for err in fails:
+        errorList.append(err)
+    print(f"Directions missing keys errors: {len(fails)}")
 
     matrix = synonymsMatrix(directionsList)
     #Repeated direction
@@ -74,7 +84,7 @@ def checkAll(folder):
         errorList.append(Error(ERRCODE.DIR_REPEATED_DIRECTION, filePath,
                             f"{error} direction is duplicate"))
     print(f"Directions repeated direction errors: {len(repeats)}")
-    
+
     # Repeated alias
     res, repeats = testSynonyms(matrix)
     for k, v in repeats.items():

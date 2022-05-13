@@ -67,6 +67,23 @@ def attacksSize(enemyList):
 
     return len(fails) > 0, fails
 
+def checkEnemiesKeys(enemyList, filePath):
+    fails = list()
+
+    # Contains objects with the required keys
+    completedEnemiesList = []
+
+    for idx, enemy in enumerate(enemyList):
+        validEnemy = True
+        res, errors = Common.ExistKeys(filePath, ["Stats","Attacks"], [], enemy, idx)
+        if res:
+            validEnemy = False
+            for err in errors:
+                fails.append(err)
+        
+        if validEnemy: completedEnemiesList.append(enemy)
+
+    return len(fails) > 0, fails, completedEnemiesList
 
 def checkAll(filesFolder, namesRecord):
     print(f"\nChecking Enemies...")
@@ -76,18 +93,11 @@ def checkAll(filesFolder, namesRecord):
         enemyList = json.loads(json_data.read())
 
     # Exist keys
-    # Contains objects with the required keys
-    completedEnemiesList = []
-    for idx, enemy in enumerate(enemyList):
-        # TODO return for html
-        res, eMessages = Common.ExistKeys(filePath, ["Stats", "Attacks", "ImageName"], [], enemy, idx)
-        if res:
-            for err in eMessages:
-                errorList.append(Error(ERRCODE.OBJECT_KEY_MISSING, filePath, f"{err}"))
-        else:
-            completedEnemiesList.append(enemy)
-    enemyList = completedEnemiesList
-    print(f"Enemies missing keys errors: {len(errorList)}")
+    res, fails, newList = checkEnemiesKeys(enemyList, filePath)
+    if res: enemyList = newList
+    for err in fails:
+        errorList.append(err)
+    print(f"Enemies missing keys errors: {len(fails)}")
 
     # Statblock size
     res, eMessages = statSize(enemyList)

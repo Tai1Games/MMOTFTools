@@ -125,20 +125,20 @@ def checkEngineItemsReferences(itemList, filePath, errorList):
 
 def checkAll(filesFolder, keyNames):
     print(f"Checking items...")
-    errorList = list()
     filePath = filesFolder +'/items.json'
     with io.open(filePath, encoding='utf-8-sig') as json_data:
         itemList = json.loads(json_data.read())
-
     errorList = []
-    checkItemReferences(itemList, filesFolder, errorList, keyNames)
-    checkEngineItemsReferences(itemList, filePath, errorList)
+
     # Exist keys
     res, fails, newList = checkItemsKeys(itemList, filePath)
     if res: itemList = newList
     for err in fails:
         errorList.append(err)
     print(f"Items missing keys errors: {len(fails)}")
+
+    checkItemReferences(itemList, filesFolder, errorList, keyNames)
+    checkEngineItemsReferences(itemList, filePath, errorList)
 
     fails = []
     checkItemReferences(itemList, filesFolder, fails, keyNames)

@@ -26,6 +26,9 @@ def createHTML(errorDict):
                         with tag('li'):
                             text(str(errorInfo.errCode), " en ", errorInfo.file, " : ", errorInfo.message)
 
+    with tag('div', id='photo-container'):
+        doc.stag('img', src='map.png', klass="photo")
+
     file = open('Report.html', 'w')
 
     file.write(indent(doc.getvalue()))

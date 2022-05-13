@@ -20,7 +20,7 @@ def checkConnectingNodes(roomsList, filePath, keyNames):
 
     return len(fails) > 0, fails
 
-def checkTransitable(roomsList, filePath, keyNames):
+def checkTransitable(roomsList, filePath, showMap):
     fails = list()
     mapGraph = nx.DiGraph()
 
@@ -42,6 +42,7 @@ def checkTransitable(roomsList, filePath, keyNames):
     pos = nx.planar_layout(mapGraph)
     nx.draw_networkx_edges(mapGraph, pos=pos, alpha= 0.5, node_size=500)
     nx.draw_networkx_labels(mapGraph, pos=pos, alpha= 1,clip_on=False)
+    if showMap: plt.show()
     plt.savefig("map.png")
 
     return fails
@@ -131,7 +132,7 @@ def checkMapKeys(roomsList, filePath):
                     
     return len(fails) > 0, fails, completedRoomsList
 
-def checkAll(filesFolder, keyNames):
+def checkAll(filesFolder, keyNames, showMap):
     print(f"\nChecking Map and Nodes...")
     errorList = list()
     filePath = filesFolder + '/mapejemplo.json'
@@ -167,7 +168,7 @@ def checkAll(filesFolder, keyNames):
         errorList.append(err)
     print(f"Map events errors: {len(fails)}")
     
-    fails= checkTransitable(roomsList, filePath, keyNames)
+    fails= checkTransitable(roomsList, filePath, showMap)
     for err in fails:
         errorList.append(err)
     print(f"Map connectivity errors: {len(fails)}")

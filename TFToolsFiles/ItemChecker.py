@@ -80,7 +80,9 @@ def checkUsableItemReferences(item, filePath, errorList):
         if(Program.checkEngineConstant(key['Value']['StatToChange'], "STAT") != True):
             errorList.append(Error(ERRCODE.ITEM_UNKNOWN_STAT, filePath+'/items.json',
                 f"{key['Value']['StatToChange']} unknown stat"))
-
+        if(Program.checkEngineConstant(key['Value']['BehaviourType'], "BEHAVIOUR") != True):
+            errorList.append(Error(ERRCODE.ITEM_UNKNOWN_BEHAVIOUR, filePath+'/items.json',
+                f"{key['Value']['BehaviourType']} unknown behaviour"))
 
 def checkEquipableItemReferences(item, filePath, errorList):
     if(Program.checkEngineConstant(item['GearSlot'], "GEARSLOT") != True):

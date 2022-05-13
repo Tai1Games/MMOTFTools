@@ -26,7 +26,7 @@ def createHTML(errorDict):
                         with tag('li'):
                             text(str(errorInfo.errCode), " en ", errorInfo.file, " : ", errorInfo.message)
 
-    file = open('newsletter.html', 'w')
+    file = open('Report.html', 'w')
 
     file.write(indent(doc.getvalue()))
 

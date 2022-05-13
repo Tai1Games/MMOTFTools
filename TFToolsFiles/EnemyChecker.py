@@ -3,7 +3,7 @@ import io
 import os
 import Common
 from Error import ERRCODE, Error
-
+from Program import checkEngineConstant
 
 def existingImage(enemyList, path):
     imagesPath = os.path.dirname(path) + '/images/'
@@ -47,6 +47,30 @@ def jsonReferences(enemyList, namesRecord):
 
     return len(fails), fails
 
+# StatToChange, StatToDepend
+def engineReferences(enemyList):
+    fails = list()
+
+    for item in enemyList:
+        try:            
+            for key, value in item.items():
+                try:
+                    statC = value["StatToChange"]
+                    if not checkEngineConstant(statC, 'STAT'):
+                        fails.append(f'{item["Name"]} has a reference to a unknown stat {statC}')
+                except TypeError:
+                    pass
+
+                try:
+                    statD = value["StatToDepend"]
+                    if not checkEngineConstant(statD, 'STAT'):
+                        fails.append(f'{item["Name"]} has a reference to a unknown stat {statD}')
+                except TypeError:
+                    pass
+
+        except KeyError:
+            pass
+    return len(fails), fails
 
 def statSize(enemyList):
     fails = []
@@ -108,6 +132,12 @@ def checkAll(filesFolder, namesRecord):
     for err in eMessages:
         errorList.append(Error(ERRCODE.ENEMY_JSON_REFERENCE, filePath, f"{err}"))
     print(f"Json references check errors: {res}")
+
+    # engine references
+    res, eMessages = engineReferences(enemyList)
+    for err in eMessages:
+        errorList.append(Error(ERRCODE.ENEMY_ENGINE_REFERENCE, filePath, f"{err}"))
+    print(f"Engine references check errors: {res}")
 
     # Missing images
     res, eMessages = existingImage(enemyList, filesFolder)

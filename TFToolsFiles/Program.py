@@ -13,6 +13,9 @@ def checkEngineConstant(constToCheck, type):
     elif(type == 'EVENT'):
         if any(constToCheck in s for s in engine_constants['Events']):
              return True
+    elif(type == 'ATTACKTYPE'):
+        if any(constToCheck in s for s in engine_constants['AttackTypes']):
+             return True
     return False
 
 def getEngineConstants(constantsToGet):

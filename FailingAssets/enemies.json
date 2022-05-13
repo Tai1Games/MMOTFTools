@@ -1,7 +1,7 @@
 ﻿[
   {
     "Name": "Manuela_Imagen_Inexistente",
-    "Stats": [ 100, 10, 15, 25 ],
+    "Stats": [ 100, 10, 15],
     "ImageName": "manoola.jpg",
     "ImageCaption": "Manuela ataca!",
     "DroppedMoney": 100,

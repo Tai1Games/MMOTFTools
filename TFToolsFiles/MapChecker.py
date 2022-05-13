@@ -17,12 +17,12 @@ def checkConnectingNodes(roomsList, filePath, errorList, keyNames):
 def checkEnemy(event, filePath, errorList, keyNames):
     if('Enemy' in event):
         if(keyNames.containsEnemy(event['Enemy']) != True):
-            errorList.append(Error(ERRCODE.ENEMY_DOES_NOT_EXIST, filePath,
+            errorList.append(Error(ERRCODE.MAP_ENEMY_DOES_NOT_EXIST, filePath,
                 f"{event['Enemy']} enemy does not exist"))
     elif('Enemies' in event):
         for enemy in event['Enemies']:
             if(keyNames.containsEnemy(enemy) != True):
-                errorList.append(Error(ERRCODE.ENEMY_DOES_NOT_EXIST, filePath,
+                errorList.append(Error(ERRCODE.MAP_ENEMY_DOES_NOT_EXIST, filePath,
                     f"{enemy} enemy does not exist"))
     else:
         errorList.append(Error(ERRCODE.EVENT_MISSING_FIELD, filePath,
@@ -38,7 +38,7 @@ def checkSingleEvent(event, filePath, errorList, keyNames):
                         f"{field} does not exist in event"))
         elif(field == 'ItemLots'):
             if(keyNames.containsItem(event['ItemLots'][0]['Item']) != True):
-                errorList.append(Error(ERRCODE.ITEM_DOES_NOT_EXIST, filePath,
+                errorList.append(Error(ERRCODE.MAP_ITEM_DOES_NOT_EXIST, filePath,
                     f"{event['ItemLots'][0]['Item']} item does not exist"))
     if(event['EventType'] == 'eStartBattle'):
         checkEnemy(event, filePath, errorList, keyNames)

@@ -5,7 +5,7 @@
     "ImageName": "manoola.jpg",
     "ImageCaption": "Manuela ataca!",
     "DroppedMoney": 100,
-    "DroppedItem": "health_potion",
+    "DroppedItem": "health_potiona",
     "DroppedItemAmount": 2,
     "ExperienceGiven": 1,
     "Attacks": [ "Slap", "Swords Dance", "MpScale" ],     
@@ -38,7 +38,7 @@
     "DroppedMoney": 2223,
     "DroppedItem": "mana_potion",
     "DroppedItemAmount": 2,
-    "Attacks": [ "Chiste sobre javascript", "El PCE es maravilloso", "No Fucking Thanks" ],
+    "Attacks": [ "Chiste sobre javascripte", "El PCE es maravilloso", "No Fucking Thanks" ],
     "OnHit": {
       "BehaviourType": "bChangeStat",
       "StatToChange": "ATK",

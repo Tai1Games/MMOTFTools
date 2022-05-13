@@ -67,24 +67,14 @@ def checkEvents(roomsList, filePath, errorList, keyNames):
 
 
 def checkAll(filesFolder, keyNames):
-    errorList = list()
+    errorList = []
     filePath = filesFolder + '/mapejemplo.json'
     with io.open(filePath, encoding='utf-8-sig') as json_data:
         roomsList = json.loads(json_data.read())
-    
-    # Repeat keys
-    RepeatKeysList = []
-    for node in roomsList:
-        # TODO return for html
-        res, fails = Common.RepeatKeys("maps.json", node)
-        if len(fails) > 0:
-            RepeatKeysList.append(fails)
-    print(f"{len(RepeatKeysList)} repeat key errors found.")
-
 
     #Map errores
     checkConnectingNodes(roomsList, filePath, errorList, keyNames)
     checkEvents(roomsList, filePath, errorList, keyNames)
     
     print(f"{len(errorList)} map errors found.")
-    return fails
+    return errorList

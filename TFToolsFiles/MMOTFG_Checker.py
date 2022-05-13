@@ -65,7 +65,7 @@ def main():
             if len(enemyErrors) > 0:
                 allErrorsDict.update({"enemyErrors": enemyErrors})
 
-            itemErrors = ItemChecker.checkAll(sys.argv[1])
+            itemErrors = ItemChecker.checkAll(sys.argv[1], keyNames)
             if len(itemErrors) > 0:
                 allErrorsDict.update({"itemErrors": itemErrors})
 
@@ -87,7 +87,7 @@ def main():
                             allErrorsDict.update({"mapErrors": mapErrors})
                     elif opt == "-i":
                         # check items
-                        itemErrors = ItemChecker.checkAll(sys.argv[1])
+                        itemErrors = ItemChecker.checkAll(sys.argv[1], keyNames)
                         if len(itemErrors) > 0:
                             allErrorsDict.update({"itemErrors": itemErrors})
                     elif opt == "-d":

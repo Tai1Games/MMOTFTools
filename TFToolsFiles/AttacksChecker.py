@@ -140,6 +140,6 @@ def checkAll(filesFolder):
     for err in eMessages:
         errorList.append(
             Error(ERRCODE.ATTACK_MISSING_REFERENCES, filePath, f"{err}"))
-    print(f"Missing references in attacks: {len(eMessages)}")
+    print(f"Attacks missing reference errors: {len(eMessages)}")
     
     return errorList

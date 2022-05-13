@@ -145,7 +145,7 @@ def checkAll(filesFolder, namesRecord):
     res, eMessages = engineReferences(enemyList)
     for err in eMessages:
         errorList.append(Error(ERRCODE.ENEMY_ENGINE_REFERENCE, filePath, f"{err}"))
-    print(f"Engine references check errors: {res}")
+    print(f"Enemies missing engine reference errors: {res}")
 
     # Missing images
     res, eMessages = existingImage(enemyList, filesFolder)

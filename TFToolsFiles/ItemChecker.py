@@ -111,6 +111,6 @@ def checkAll(filesFolder, keyNames):
     checkItemReferences(itemList, filesFolder, fails, keyNames)
     for err in fails:
         errorList.append(err)
-    print(f"Items reference errors: {len(fails)}")
+    print(f"Items missing reference errors: {len(fails)}")
 
     return errorList

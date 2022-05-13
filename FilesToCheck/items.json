@@ -152,10 +152,9 @@
     ],
     "OnUnequipEvents": [
       {
-        "EventType": "eSetFlag",
-        "Name": "TorchLit",
-        "SetAs": false
+        "EventType": "eStartBattle",
+        "Enemies": [ "Manuedfghla", "Fedejimbo" ]
       }
-    ]
+   ]
   }
 ]

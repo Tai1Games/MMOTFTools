@@ -35,6 +35,11 @@
         "NECK"
     ],
     
+    "AttackTypes":[
+        "aScaled",
+        "aStatChanging"
+    ],
+    
     "eGiveItem":[
         "ItemLots"
     ],

@@ -9,10 +9,10 @@ def existingImage(enemyList, path):
     imagesPath = os.path.dirname(path) + '/images/'
 
     missingImages = [enemy["Name"] for enemy in enemyList
-                     if "ImageName" not in enemy.keys() or
-                     not os.path.isfile(imagesPath+enemy["ImageName"])]
+                    if "ImageName" not in enemy.keys() or
+                    not os.path.isfile(imagesPath+enemy["ImageName"])]
 
-    return len(missingImages), missingImages
+    return len(missingImages) > 0, missingImages
 
 
 def jsonReferences(enemyList, namesRecord):
@@ -45,7 +45,7 @@ def jsonReferences(enemyList, namesRecord):
                         fails.append(
                             f'"{newEnemy}" referenced by "{enemy["Name"]}" doesn\'t exist')
 
-    return len(fails), fails
+    return len(fails) > 0, fails
 
 # StatToChange, StatToDepend
 def engineReferences(enemyList):
@@ -76,83 +76,93 @@ def statSize(enemyList):
     fails = []
 
     for item in enemyList:
-        try:
-            if len(item["Stats"]) != 4:
-                fails.append(f'{item["Name"]} doesn\'t have 4 stats')
-        except KeyError:
-            try:
-                # Has no Stats property
-                fails.append(f'{item["Name"]} has no Stats block')
-            except KeyError:
-                # Doesn't event have a name lol
-                fails.append(f"An enemy is malformed!")
+        if len(item["Stats"]) != 4:
+            fails.append(f'{item["Name"]} doesn\'t have 4 stats')
 
-    return len(fails), fails
+    return len(fails) > 0, fails
 
 
 def attacksSize(enemyList):
     fails = []
 
     for item in enemyList:
-        try:
-            if len(item["Attacks"]) < 1:
-                fails.append(f'{item["Name"]} requires at least 1 attack')
-        except KeyError:
-            try:
-                # Has no Attacks property
-                fails.append(f'{item["Name"]} has no Attacks block')
-            except KeyError:
-                pass
+        if len(item["Attacks"]) < 1:
+            fails.append(f'{item["Name"]} requires at least 1 attack')
 
-    return len(fails), fails
+    return len(fails) > 0, fails
 
+def checkEnemiesKeys(enemyList, filePath):
+    fails = list()
+
+    # Contains objects with the required keys
+    completedEnemiesList = []
+
+    for idx, enemy in enumerate(enemyList):
+        validEnemy = True
+        res, errors = Common.ExistKeys(filePath, ["Stats","Attacks"], [], enemy, idx)
+        if res:
+            validEnemy = False
+            for err in errors:
+                fails.append(err)
+        
+        if validEnemy: completedEnemiesList.append(enemy)
+
+    return len(fails) > 0, fails, completedEnemiesList
 
 def checkAll(filesFolder, namesRecord):
-    print(f"Checking enemies...")
+    print(f"\nChecking Enemies...")
+    errorList = list()
     filePath = filesFolder + '/enemies.json'
     with io.open(filePath, encoding='utf-8-sig') as json_data:
         enemyList = json.loads(json_data.read())
 
-    errorList = []
+    # Exist keys
+    res, fails, newList = checkEnemiesKeys(enemyList, filePath)
+    if res: enemyList = newList
+    for err in fails:
+        errorList.append(err)
+    print(f"Enemies missing keys errors: {len(fails)}")
 
     # Statblock size
     res, eMessages = statSize(enemyList)
     for err in eMessages:
         errorList.append(Error(ERRCODE.ENEMY_STAT_SIZE, filePath, f"{err}"))
-    print(f"Stat size check errors: {res}")
+    print(f"Enemies Stat size errors: {len(eMessages)}")
 
     # Attacks minimum size
     res, eMessages = attacksSize(enemyList)
     for err in eMessages:
         errorList.append(Error(ERRCODE.ENEMY_ATTACK_SIZE, filePath, f"{err}"))
-    print(f"Attacks size check errors: {res}")
+    print(f"Enemies Attacks size errors: {len(eMessages)}")
 
     # json references
     res, eMessages = jsonReferences(enemyList, namesRecord)
     for err in eMessages:
         errorList.append(Error(ERRCODE.ENEMY_JSON_REFERENCE, filePath, f"{err}"))
-    print(f"Json references check errors: {res}")
+    print(f"Enemies Json references errors: {len(eMessages)}")
 
     # engine references
     res, eMessages = engineReferences(enemyList)
     for err in eMessages:
         errorList.append(Error(ERRCODE.ENEMY_ENGINE_REFERENCE, filePath, f"{err}"))
-    print(f"Engine references check errors: {res}")
+    print(f"Enemies missing engine reference errors: {res}")
 
     # Missing images
     res, eMessages = existingImage(enemyList, filesFolder)
     for err in eMessages:
         errorList.append(Error(ERRCODE.ENEMY_IMAGE_MISSING,
-                         filePath, f'"{err}" has no image'))
-    print(f"Missing image check errors: {res}")
+                        filePath, f'"{err}" has no image'))
+    print(f"Enemies missing image errors: {len(eMessages)}")
 
     # Repeat keys
-    RepeatKeysList = []
-    for enemy in enemyList:
-        # TODO return for html
-        res, fails = Common.RepeatKeys(filePath, enemy)
-        if len(fails) > 0:
-            RepeatKeysList.append(fails)
-    print(f"{len(RepeatKeysList)} repeat key errors found.")
+    # repeatKeysLen = 0
+    # for enemy in enemyList:
+    #     # TODO return for html
+    #     res, fails = Common.RepeatKeys(filePath, enemy)
+    #     if res:
+    #         for err in fails:
+    #             errorList.append(err)
+    #         repeatKeysLen += len(fails)
+    # print(f"Enemies repeat keys errors: {repeatKeysLen}")
 
     return errorList

@@ -1,7 +1,6 @@
 import sys
 import os
 import getopt
-from turtle import update
 import inspect
 
 from KNamesRecord import KeyNamesRecord
@@ -49,10 +48,11 @@ def main():
         if len(sys.argv) == 2:
             print("Running all checks...")
 
-            keyNamesErrors = keyNames.checkAll()
-            if len(keyNamesErrors) > 0:
-                allErrorsDict.update({"keyNamesErrors": keyNamesErrors})
-
+            if not keyNames.checkAll():
+                print("Name errors must be fixed before proceeding")
+                return -1
+            # if len(keyNamesErrors) > 0:
+            #     allErrorsDict.update({"keyNamesErrors": keyNamesErrors})
             directionsErrors = DirectionsChecker.checkAll(sys.argv[1])
             if len(directionsErrors) > 0:
                 allErrorsDict.update({"directionsErrors": directionsErrors})
@@ -77,7 +77,9 @@ def main():
             arguments = sys.argv[2:]
             try:
                 opts, args = getopt.getopt(arguments, "hmidea")
-                keyNames.checkAll()
+                if not keyNames.checkAll():
+                    print("Name errors must be fixed before proceeding")
+                    return -1
 
                 for opt, arg in opts:
                     if opt == "-m":

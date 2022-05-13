@@ -1,10 +1,39 @@
+import os
 from tabnanny import check
 import Common, io, json
 from Error import ERRCODE, Error
-import Program
-import Common
-import os
 
+def checkItemsKeys(itemList, filePath):
+    fails = list()
+
+    # Contains objects with the required keys
+    completedItemsList = []
+
+    for idx, item in enumerate(itemList):
+        validItem = True
+        try:
+            if item["ItemType"] == "EquipableItem":
+                res, errors = Common.ExistKeys(filePath, ["GearSlot"], [], item, idx)
+                if res:
+                    validItem = False
+                    for err in errors:
+                        fails.append(err)
+        except KeyError:
+                res, errors = Common.ExistKeys(filePath, ["Key_Words"], [], item, idx)
+                if res:
+                    validItem = False
+                    for err in errors:
+                        fails.append(err)
+
+        res, errors = Common.ExistKeysOnEvents(filePath, ["OnEquipEvents","OnUnequipEvents"], item, idx)
+        if res:
+            validItem = False
+            for err in errors:
+                fails.append(err)
+
+        if validItem: completedItemsList.append(item)
+
+    return len(fails) > 0, fails, completedItemsList
 
 def checkEnemies(event, filePath, errorList, keyNames):
     event = event[0]
@@ -95,6 +124,7 @@ def checkEngineItemsReferences(itemList, filePath, errorList):
 
 def checkAll(filesFolder, keyNames):
     print(f"Checking items...")
+    errorList = list()
     filePath = filesFolder +'/items.json'
     with io.open(filePath, encoding='utf-8-sig') as json_data:
         itemList = json.loads(json_data.read())
@@ -102,7 +132,17 @@ def checkAll(filesFolder, keyNames):
     errorList = []
     checkItemReferences(itemList, filesFolder, errorList, keyNames)
     checkEngineItemsReferences(itemList, filePath, errorList)
+    # Exist keys
+    res, fails, newList = checkItemsKeys(itemList, filePath)
+    if res: itemList = newList
+    for err in fails:
+        errorList.append(err)
+    print(f"Items missing keys errors: {len(fails)}")
 
-    print(f"{len(errorList)} items errors found.")
+    fails = []
+    checkItemReferences(itemList, filesFolder, fails, keyNames)
+    for err in fails:
+        errorList.append(err)
+    print(f"Items missing reference errors: {len(fails)}")
 
     return errorList

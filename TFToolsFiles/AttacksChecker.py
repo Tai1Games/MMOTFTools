@@ -2,6 +2,9 @@ import json
 import io
 import Common
 from Error import ERRCODE, Error
+from KNamesRecord import KeyNamesRecord
+from Program import checkEngineConstant
+
 
 def negativeValues(attacksList):
     fails = list()
@@ -28,6 +31,36 @@ def negativeValues(attacksList):
 
     return len(fails) > 0, fails
 
+def checkReferences(attacksList):
+    fails = list()
+
+    for item in attacksList:
+        try:
+            # stat change 
+            statC = item["StatToChange"]
+
+            if not checkEngineConstant(statC, 'STAT'):
+                fails.append(f'{item["Name"]} has a reference to a unknown stat {statC}')
+        except KeyError:
+            pass
+
+        try:
+            # stat scale
+            statS = item["StatToScale"]
+           
+            if not checkEngineConstant(statS, 'STAT'):
+                fails.append(f'{item["Name"]} has a reference to a unknown stat {statS}')
+        except KeyError:
+            pass    
+
+        try:
+            # attack type exist            
+            if not checkEngineConstant(item["AttackType"], 'ATTACKTYPE'):
+                fails.append(f'{item["Name"]} has a reference to a unknown attackType {item["AttackType"]}')          
+        except KeyError:
+            pass
+
+    return len(fails) > 0, fails
 
 def checkAll(filesFolder):
     print("\nChecking Attacks...")
@@ -66,5 +99,12 @@ def checkAll(filesFolder):
     #             errorList.append(err)
     #         repeatKeysLen += len(fails)
     # print(f"Attacks repeat keys errors: {repeatKeysLen}")
+
+    # Missing references
+    res, eMessages = checkReferences(attacksList)
+    for err in eMessages:
+        errorList.append(
+            Error(ERRCODE.ATTACK_MISSING_REFERENCES, filePath, f"{err}"))
+    print(f"Missing references in attacks: {len(eMessages)}")
     
     return errorList

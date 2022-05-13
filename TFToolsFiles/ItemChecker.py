@@ -2,6 +2,7 @@ import os
 from tabnanny import check
 import Common, io, json
 from Error import ERRCODE, Error
+import Program
 
 def checkItemsKeys(itemList, filePath):
     fails = list()

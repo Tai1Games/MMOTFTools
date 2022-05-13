@@ -64,7 +64,16 @@ def checkItemReferences(itemList, filePath, errorList, keyNames):
         if('OnUnequipEvents' in item):
             checkEventReferences(item['OnUnequipEvents'], filePath, errorList, keyNames)
             
+def checkKeyWords(itemList, filePath, errorList):
+    for item in itemList:
+        if('Key_Words' in item):
+            for i in range(0, len(item['Key_Words'])):
+                for j in range(0, len(item['Key_Words'])):
+                    if(i != j and item['Key_Words'][i]['Key'] == item['Key_Words'][j]['Key']):
+                        errorList.append(Error(ERRCODE.ITEM_KEY_REPEATED, filePath+'/items.json',
+                           f"{item['Key_Words'][j]['Key']} key is repeated"))
 
+    return
 
 def checkAll(filesFolder, keyNames):
     print(f"Checking items...")
@@ -74,6 +83,7 @@ def checkAll(filesFolder, keyNames):
 
     errorList = []
     checkItemReferences(itemList, filesFolder, errorList, keyNames)
+    checkKeyWords(itemList, filePath, errorList)
 
     print(f"{len(errorList)} items errors found.")
 

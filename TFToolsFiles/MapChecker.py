@@ -102,6 +102,14 @@ def checkMapKeys(roomsList, filePath):
                     
     return len(fails) > 0, fails, completedRoomsList
 
+def checkInvalidFields(roomsList):
+    invalidFields = dict()
+    for room in roomsList:
+        inv = [i for i in room.keys() if not Program.isFieldValid(i, "Maps")]
+        if len(inv) > 0:
+            invalidFields[room["Name"]] = inv
+    return len(invalidFields) > 0, invalidFields
+
 def checkAll(filesFolder, keyNames):
     print(f"\nChecking Map and Nodes...")
     errorList = list()
@@ -137,6 +145,13 @@ def checkAll(filesFolder, keyNames):
     for err in fails:
         errorList.append(err)
     print(f"Map events errors: {len(fails)}")
-    
+
+    # Nodes with extra keys
+    res, eMessages = checkInvalidFields(roomsList)
+    for k, v in eMessages.items():
+        errorList.append(Error(ERRCODE.COMMON_INVALID_FIELD,
+                        filePath, f'"{k}" has invalid fields {v}'))
+        print(f'"{k}" has invalid fields {v}')
+    print(f"Nodes with invalid fields: {len(eMessages)}")
 
     return errorList

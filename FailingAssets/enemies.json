@@ -50,6 +50,7 @@
       "BehaviourType":"bSetFlag",
       "Name":"CleonftDefeated",
       "SetAs":"True"
-    }
+    },
+    "DiaDeLaSemana": "Lentejas"
   }
 ]

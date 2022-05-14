@@ -1,72 +1,131 @@
 {
-    "Events":[
-        "OnArriveEvent",
-        "OnInspectEvent",
-        "OnExitEvent"
+  "Events": [
+    "OnArriveEvent",
+    "OnInspectEvent",
+    "OnExitEvent"
+  ],
+  "EventsType": [
+    "eGiveItem",
+    "eLearnAttack",
+    "eSendAudio",
+    "eSendImage",
+    "eSendImageCollection",
+    "eSendText",
+    "eSetFlag",
+    "eStartBattle"
+  ],
+  "BehaviourType": [
+    "bChangeStat",
+    "bPlayerDeath",
+    "bSetFlag"
+  ],
+  "Stats": [
+    "HP",
+    "ATK",
+    "SPE",
+    "MP"
+  ],
+  "GearSlots": [
+    "HEAD",
+    "FEET",
+    "HANDS",
+    "WRISTS",
+    "FINGER",
+    "TRINKET",
+    "WEAPON",
+    "CHEST",
+    "LEGS",
+    "WAIST",
+    "BACK",
+    "NECK"
+  ],
+  "AttackTypes": [
+    "aScaled",
+    "aStatChanging"
+  ],
+  "eGiveItem": [
+    "ItemLots"
+  ],
+  "eLearnAttack": [
+  ],
+  "eSendAudio": [
+    "AudioName"
+  ],
+  "eSendImage": [
+    "ImageName"
+  ],
+  "eSendImageCollection": [
+  ],
+  "eSendText": [
+    "Description"
+  ],
+  "eSetFlag": [
+    "Name",
+    "SetAs"
+  ],
+  "eStartBattle": [
+  ],
+  "PossibleFields": {
+    "Common": [
+      "Name"
     ],
-    "EventsType":[
-        "eGiveItem",
-        "eLearnAttack",
-        "eSendAudio",
-        "eSendImage",
-        "eSendImageCollection",
-        "eSendText",
-        "eSetFlag",
-        "eStartBattle"
+    "Attack": [
+      "Power",
+      "MpCost",
+      "Type",
+      "AffectsSelf",
+      "StatToScale",
+      "StatToChange",
+      "Multiple",
+      "Change",
+      "AttackType"
     ],
-    "BehaviourType":[
-        "bChangeStat",
-        "bPlayerDeath",
-        "bSetFlag"
+    "Object": [
+      "MaxStackQuantity",
+      "GearSlot",
+      "Key_Words",
+      "StatModifiers",
+      "OnEquipEvents",
+      "Key_Words",
+      "ItemType",
+      "OnUnequipEvents"
     ],
-    "Stats":[
-        "HP",
-        "ATK",
-        "SPE",
-        "MP"
+    "Enemy": [
+      "Stats",
+      "Attacks",
+      "OnHit",
+      "OnKill",
+      "DroppedMoney",
+      "DroppedItem",
+      "DroppedItemAmount",
+      "ExperienceGiven",
+      "ImageCaption",
+      "OnTurnEnd",
+      "ImageName"
     ],
-    "GearSlots":[
-        "HEAD",
-        "FEET",
-        "HANDS",
-        "WRISTS",
-        "FINGER",
-        "TRINKET",
-        "WEAPON",
-        "CHEST",
-        "LEGS",
-        "WAIST",
-        "BACK",
-        "NECK"
+    "Maps": [
+      "NodeConnections",
+      "Direction",
+      "ConnectingNode",
+      "OnArriveEvent",
+      "OnExitEvent",
+      "OnInspectEvent"
     ],
-    
-    "AttackTypes":[
-        "aScaled",
-        "aStatChanging"
-    ],
-    
-    "eGiveItem":[
-        "ItemLots"
-    ],
-    "eLearnAttack":[
-        
-    ],
-    "eSendAudio":[
-        "AudioName"
-    ],
-    "eSendImage":[
-        "ImageName"
-    ],
-    "eSendImageCollection":[
-        
-    ],    
-    "eSendText":[
-        "Description"
-    ],
-    "eSetFlag":[
-        "Name",
-        "SetAs"
-    ],
-    "eStartBattle":[
+    "Event": [
+      "EventType",
+      "TriggerCondition",
+      "Description",
+      "ImageName",
+      "ImagesNames",
+      "ItemLots",
+      "Item",
+      "Quantity",
+      "ChanceToObtain",
+      "Name",
+      "SetAs",
+      "AudioName",
+      "Enemy",
+      "Enemies"
     ]
+  }
 }

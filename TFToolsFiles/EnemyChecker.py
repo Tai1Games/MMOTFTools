@@ -3,7 +3,7 @@ import io
 import os
 import Common
 from Error import ERRCODE, Error
-from Program import checkEngineConstant
+from Program import checkEngineConstant, isFieldValid
 
 def existingImage(enemyList, path):
     imagesPath = os.path.dirname(path) + '/images/'
@@ -13,7 +13,6 @@ def existingImage(enemyList, path):
                     not os.path.isfile(imagesPath+enemy["ImageName"])]
 
     return len(missingImages) > 0, missingImages
-
 
 def jsonReferences(enemyList, namesRecord):
     fails = []
@@ -81,7 +80,6 @@ def statSize(enemyList):
 
     return len(fails) > 0, fails
 
-
 def attacksSize(enemyList):
     fails = []
 
@@ -108,6 +106,15 @@ def checkEnemiesKeys(enemyList, filePath):
         if validEnemy: completedEnemiesList.append(enemy)
 
     return len(fails) > 0, fails, completedEnemiesList
+
+def checkInvalidFields(enemyList):
+    invalidFields = dict()
+    for enemy in enemyList:
+        inv = [i for i in enemy.keys() if not isFieldValid(i, "Enemy")]
+        if len(inv) > 0:
+            invalidFields[enemy["Name"]] = inv
+    return len(invalidFields) > 0, invalidFields
+
 
 def checkAll(filesFolder, namesRecord):
     print(f"\nChecking Enemies...")
@@ -153,6 +160,13 @@ def checkAll(filesFolder, namesRecord):
         errorList.append(Error(ERRCODE.ENEMY_IMAGE_MISSING,
                         filePath, f'"{err}" has no image'))
     print(f"Enemies missing image errors: {len(eMessages)}")
+
+    # Enemies with extra keys
+    res, eMessages = checkInvalidFields(enemyList)
+    for k, v in eMessages.items():
+        errorList.append(Error(ERRCODE.COMMON_INVALID_FIELD,
+                        filePath, f'"{k}" has invalid fields {v}'))
+    print(f"Enemies with invalid fields: {len(eMessages)}")
 
     # Repeat keys
     # repeatKeysLen = 0

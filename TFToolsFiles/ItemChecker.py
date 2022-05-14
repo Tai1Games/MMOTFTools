@@ -87,13 +87,14 @@ def checkEventReferences(event, filePath, errorList, keyNames):
                             f"{event[0]['ImageName']} image does not exists"))
     return
 
-def checkItemReferences(itemList, filePath, errorList, keyNames):
+def checkItemReferences(itemList, filePath, keyNames):
+    fails = list()
     for item in itemList:
         if('OnEquipEvents' in item):
-            checkEventReferences(item['OnEquipEvents'], filePath, errorList, keyNames)
+            checkEventReferences(item['OnEquipEvents'], filePath, fails, keyNames)
         if('OnUnequipEvents' in item):
-            checkEventReferences(item['OnUnequipEvents'], filePath, errorList, keyNames)
-            
+            checkEventReferences(item['OnUnequipEvents'], filePath, fails, keyNames)
+    return len(fails) > 0, fails            
 
 def checkUsableItemReferences(item, filePath, errorList):    
     for key in item['Key_Words']:
@@ -115,13 +116,33 @@ def checkEquipableItemReferences(item, filePath, errorList):
                 f"{stat} unknown stat"))
 
 
-def checkEngineItemsReferences(itemList, filePath, errorList):
+def checkEngineItemsReferences(itemList, filePath):
+    fails = list()
     for item in itemList:
         if('Key_Words' in item):
-            checkUsableItemReferences(item, filePath, errorList)
+            checkUsableItemReferences(item, filePath, fails)
         else: 
-            checkEquipableItemReferences(item, filePath, errorList)
+            checkEquipableItemReferences(item, filePath, fails)
+    return len(fails) > 0, fails
 
+def checkKeyWordsRepeated(itemList, filePath):
+    fails = list()
+    repeatedKeys = []
+    for item in itemList:
+        try:
+            nKeyWords = len(item['Key_Words'])
+            for i in range(nKeyWords):
+                currentKey = item['Key_Words'][i]['Key']
+                for j in range(nKeyWords):
+                    if(i != j and currentKey == item['Key_Words'][j]['Key'] and currentKey not in repeatedKeys):
+                        repeatedKeys.append(currentKey)
+                        fails.append(Error(ERRCODE.ITEM_KEY_REPEATED, filePath,
+                           f"{item['Key_Words'][j]['Key']} key is repeated in Key_Words at object named {item['Name']}"))
+        except KeyError:
+            pass
+    
+    return len(fails) > 0, fails
+    
 def checkInvalidFields(itemList):
     invalidFields = dict()
     for item in itemList:
@@ -131,7 +152,7 @@ def checkInvalidFields(itemList):
     return len(invalidFields) > 0, invalidFields
 
 def checkAll(filesFolder, keyNames):
-    print(f"Checking items...")
+    print(f"\nChecking items...")
     filePath = filesFolder +'/items.json'
     with io.open(filePath, encoding='utf-8-sig') as json_data:
         itemList = json.loads(json_data.read())
@@ -144,11 +165,18 @@ def checkAll(filesFolder, keyNames):
         errorList.append(err)
     print(f"Items missing keys errors: {len(fails)}")
 
-    checkItemReferences(itemList, filesFolder, errorList, keyNames)
-    checkEngineItemsReferences(itemList, filePath, errorList)
+    res, fails = checkKeyWordsRepeated(itemList, filePath)
+    for err in fails:
+        print(err.message)
+        errorList.append(err)
+    print(f"Items Key_Words keys repeated errors: {len(fails)}")
+    
+    res, fails = checkEngineItemsReferences(itemList, filePath)
+    for err in fails:
+        errorList.append(err)
+    print(f"Items missing engine reference errors: {len(fails)}")
 
-    fails = []
-    checkItemReferences(itemList, filesFolder, fails, keyNames)
+    res, fails = checkItemReferences(itemList, filesFolder, keyNames)
     for err in fails:
         errorList.append(err)
     print(f"Items missing reference errors: {len(fails)}")

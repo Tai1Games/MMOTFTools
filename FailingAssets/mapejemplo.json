@@ -1,6 +1,7 @@
 [
   {
     "Name": "Corridor1",
+    "Hola": 2,
     "NodeConnections": {
       "north": {
         "ConnectingNode": "Corridor2"

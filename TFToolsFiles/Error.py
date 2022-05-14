@@ -47,6 +47,8 @@ class ERRCODE(Enum):
     OBJECT_KEYS_DUPLICATED = 90
     OBJECT_KEY_MISSING = 91
 
+    COMMON_INVALID_FIELD = 100
+
 
 class Error:
     errCode = ERRCODE.UNKNOWN

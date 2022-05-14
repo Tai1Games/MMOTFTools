@@ -1,6 +1,7 @@
 ﻿[
   {
     "Name": "health_potion",
+    "PlatoDeLaSemana":"Jueves",
     "MaxStackQuantity": 5,
     "Key_Words": [
       {

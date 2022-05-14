@@ -22,6 +22,7 @@ Usage example: python ../files/ -mid
 Possible options:
 	-h display this message
 	-m check maps
+    -s show interactive map
 	-i check items
 	-d check directions
 	-e check enemies
@@ -76,7 +77,7 @@ def main():
             # Get all relevant arguments
             arguments = sys.argv[2:]
             try:
-                opts, args = getopt.getopt(arguments, "hmidea")
+                opts, args = getopt.getopt(arguments, "hmsidea")
                 if not keyNames.checkAll():
                     print("Name errors must be fixed before proceeding")
                     return -1
@@ -84,7 +85,8 @@ def main():
                 for opt, arg in opts:
                     if opt == "-m":
                         # check maps
-                        mapErrors = MapChecker.checkAll(sys.argv[1], keyNames)
+                        showMap = ('-s', '') in opts
+                        mapErrors = MapChecker.checkAll(sys.argv[1], keyNames, showMap)
                         if len(mapErrors) > 0:
                             allErrorsDict.update({"mapErrors": mapErrors})
                     elif opt == "-i":

@@ -129,5 +129,24 @@
         "TriggerCondition": "!ManuelaKilled"
       }
     ]
+  },
+  {
+    "Name": "Narnia",
+    "NodeConnections": {
+      "south": {
+        "ConnectingNode": "Armario"
+      },
+      "east": {
+        "ConnectingNode": "Bosque"
+      }
+    }
+  },
+  {
+    "Name": "Armario",
+    "NodeConnections": {
+      "south": {
+        "ConnectingNode": "Narnia"
+      }
+    }
   }
 ]

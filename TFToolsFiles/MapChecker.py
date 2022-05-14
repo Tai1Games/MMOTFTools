@@ -1,8 +1,12 @@
 import json
 import io
+
+from numpy import size
 from Error import ERRCODE, Error
 import Program
 import Common
+import networkx as nx
+import matplotlib.pyplot as plt
 
 def checkConnectingNodes(roomsList, filePath, keyNames):
     fails = list()
@@ -16,6 +20,32 @@ def checkConnectingNodes(roomsList, filePath, keyNames):
 
     return len(fails) > 0, fails
 
+def checkTransitable(roomsList, filePath, showMap):
+    fails = list()
+    mapGraph = nx.DiGraph()
+
+    for room in roomsList:
+        for n in room['NodeConnections']:
+            other = room['NodeConnections'][n]['ConnectingNode']
+            mapGraph.add_edge(room['Name'],other)            
+
+    if not nx.is_strongly_connected(mapGraph) :
+        fails.append(Error(ERRCODE.MAP_NODE_NOT_ACCESIBLE, filePath,
+                          f"Some node/s is/are not accesible from other nodes"))
+        strongComp = nx.strongly_connected_components(mapGraph)
+    
+    if not nx.is_weakly_connected(mapGraph):
+        fails.append(Error(ERRCODE.MAP_IS_NOT_CONECTED, filePath,
+                          f"Some node/s is/are not conected to the other nodes"))
+
+    #Cosas de pintar
+    pos = nx.planar_layout(mapGraph)
+    nx.draw_networkx_edges(mapGraph, pos=pos, alpha= 0.5, node_size=500)
+    nx.draw_networkx_labels(mapGraph, pos=pos, alpha= 1,clip_on=False)
+    if showMap: plt.show()
+    plt.savefig("map.png")
+
+    return fails
 
 def checkEnemy(event, filePath, errorList, keyNames):
     if('Enemy' in event):
@@ -110,7 +140,7 @@ def checkInvalidFields(roomsList):
             invalidFields[room["Name"]] = inv
     return len(invalidFields) > 0, invalidFields
 
-def checkAll(filesFolder, keyNames):
+def checkAll(filesFolder, keyNames,showMap):
     print(f"\nChecking Map and Nodes...")
     errorList = list()
     filePath = filesFolder + '/mapejemplo.json'
@@ -145,6 +175,11 @@ def checkAll(filesFolder, keyNames):
     for err in fails:
         errorList.append(err)
     print(f"Map events errors: {len(fails)}")
+    
+    fails= checkTransitable(roomsList, filePath, showMap)
+    for err in fails:
+        errorList.append(err)
+    print(f"Map connectivity errors: {len(fails)}")
 
     # Nodes with extra keys
     res, eMessages = checkInvalidFields(roomsList)

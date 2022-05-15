@@ -70,7 +70,7 @@ def main():
             if len(itemErrors) > 0:
                 allErrorsDict.update({"itemErrors": itemErrors})
 
-            mapErrors = MapChecker.checkAll(sys.argv[1], keyNames)
+            mapErrors = MapChecker.checkAll(sys.argv[1], keyNames, False)
             if len(mapErrors) > 0:
                 allErrorsDict.update({"mapErrors": mapErrors})
         else:

@@ -22,7 +22,7 @@ Usage example: python ../files/ -mid
 Possible options:
 	-h display this message
 	-m check maps
-    -s show interactive map
+    -s show interactive map (needs to check map)
 	-i check items
 	-d check directions
 	-e check enemies
@@ -45,6 +45,8 @@ def main():
 
         # Get list of names
         keyNames = KeyNamesRecord(sys.argv[1])
+        
+        htmlImg = False
 
         if len(sys.argv) == 2:
             print("Running all checks...")
@@ -73,6 +75,7 @@ def main():
             mapErrors = MapChecker.checkAll(sys.argv[1], keyNames, False)
             if len(mapErrors) > 0:
                 allErrorsDict.update({"mapErrors": mapErrors})
+            htmlImg = True
         else:
             # Get all relevant arguments
             arguments = sys.argv[2:]
@@ -85,10 +88,11 @@ def main():
                 for opt, arg in opts:
                     if opt == "-m":
                         # check maps
-                        showMap = ('-s', '') in opts
+                        showMap = ('-s', '') in opts            
                         mapErrors = MapChecker.checkAll(sys.argv[1], keyNames, showMap)
                         if len(mapErrors) > 0:
                             allErrorsDict.update({"mapErrors": mapErrors})
+                        htmlImg = True
                     elif opt == "-i":
                         # check items
                         itemErrors = ItemChecker.checkAll(sys.argv[1], keyNames)
@@ -120,7 +124,7 @@ def main():
                 displayHelp()
                 sys.exit(1)
 
-    html.createHTML(allErrorsDict)
+    html.createHTML(allErrorsDict,htmlImg)
 
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
 from yattag import Doc, indent
 from Error import *
 
-def createHTML(errorDict):
+def createHTML(errorDict, htmlImg):
 
     doc, tag, text, line = Doc().ttl()
 
@@ -26,8 +26,9 @@ def createHTML(errorDict):
                         with tag('li'):
                             text(str(errorInfo.errCode), " en ", errorInfo.file, " : ", errorInfo.message)
 
-    with tag('div', id='photo-container'):
-        doc.stag('img', src='map.png', klass="photo")
+    if htmlImg:
+        with tag('div', id='photo-container'):
+            doc.stag('img', src='map.png', klass="photo")
 
     file = open('Report.html', 'w')
 

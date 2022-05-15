@@ -129,6 +129,9 @@
       },
       "puerta": {
         "ConnectingNode": "HabAlvarJorge"
+      },
+      "trampa": {
+        "ConnectingNode": "DeAquiNoSales"
       }
     },
     "OnArriveEvent": [
@@ -622,5 +625,26 @@
         "Enemy": "Tinky.exe"
       }
     ]
+  },
+  {
+    "Name": "Narnia",
+    "NodeConnections": {
+      "alcantarilla": {
+        "ConnectingNode": "LugarDeLosSueños"
+      }
+    }
+  },
+  {
+    "Name": "LugarDeLosSueños",
+    "NodeConnections": {
+      "alcantarilla": {
+        "ConnectingNode": "Narnia"
+      }
+    }
+  },
+  {
+    "Name": "DeAquiNoSales",
+    "NodeConnections": {
+    }
   }
 ]

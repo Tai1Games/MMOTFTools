@@ -3,10 +3,10 @@ import io
 import os
 import Common
 from Error import ERRCODE, Error
-from Program import checkEngineConstant, isFieldValid
+from EngineConstants import checkEngineConstant, isFieldValid
 
 def existingImage(enemyList, path):
-    imagesPath = os.path.dirname(path) + '/images/'
+    imagesPath = path + '/images/'
 
     missingImages = [enemy["Name"] for enemy in enemyList
                     if "ImageName" not in enemy.keys() or

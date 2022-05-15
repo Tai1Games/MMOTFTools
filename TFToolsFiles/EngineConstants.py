@@ -38,6 +38,3 @@ def getEngineConstants(constantsToGet):
 
 with open('./EngineConstants.json', 'r') as f:
     engine_constants = json.load(f)
-
-#if(checkEngineConstant("Cock", "GEARSLOT")): print("OUI VEGGI GUD DIS MAP")
-#else: print("OH NON NON DIS MAP IS BEGGRI BAD U SEE")

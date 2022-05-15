@@ -168,15 +168,4 @@ def checkAll(filesFolder, namesRecord):
                         filePath, f'"{k}" has invalid fields {v}'))
     print(f"Enemies with invalid fields: {len(eMessages)}")
 
-    # Repeat keys
-    # repeatKeysLen = 0
-    # for enemy in enemyList:
-    #     # TODO return for html
-    #     res, fails = Common.RepeatKeys(filePath, enemy)
-    #     if res:
-    #         for err in fails:
-    #             errorList.append(err)
-    #         repeatKeysLen += len(fails)
-    # print(f"Enemies repeat keys errors: {repeatKeysLen}")
-
     return errorList

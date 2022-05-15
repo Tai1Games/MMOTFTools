@@ -139,17 +139,6 @@ def checkAll(filesFolder):
                         filePath, f'"{k}" has invalid fields {v}'))
     print(f"Attacks with invalid fields: {len(eMessages)}")
 
-    # Repeat keys
-    # repeatKeysLen = 0
-    # for attack in attacksList:
-    #     # TODO return for html
-    #     res, fails = Common.RepeatKeys(filePath, attack)
-    #     if res:
-    #         for err in fails:
-    #             errorList.append(err)
-    #         repeatKeysLen += len(fails)
-    # print(f"Attacks repeat keys errors: {repeatKeysLen}")
-
     # Missing references
     res, eMessages = checkReferences(attacksList)
     for err in eMessages:

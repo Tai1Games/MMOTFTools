@@ -72,7 +72,7 @@ def checkSingleEvent(event, filePath, folderPath, errorList, keyNames):
                         f"{field} does not exist in event"))
         elif(field == 'ItemLots'):
             if(keyNames.containsItem(event['ItemLots'][0]['Item']) != True):
-                errorList.append(Error(ERRCODE.MAP_IMAGE_DOES_NOT_EXIST, filePath,
+                errorList.append(Error(ERRCODE.MAP_ITEM_DOES_NOT_EXIST, filePath,
                     f"{event['ItemLots'][0]['Item']} item does not exist"))
     if(event['EventType'] == 'eStartBattle'):
         checkEnemyEvent(event, filePath, errorList, keyNames)

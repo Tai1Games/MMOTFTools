@@ -54,8 +54,7 @@ def main():
             if not keyNames.checkAll():
                 print("Name errors must be fixed before proceeding")
                 return -1
-            # if len(keyNamesErrors) > 0:
-            #     allErrorsDict.update({"keyNamesErrors": keyNamesErrors})
+                
             directionsErrors = DirectionsChecker.checkAll(sys.argv[1])
             if len(directionsErrors) > 0:
                 allErrorsDict.update({"directionsErrors": directionsErrors})

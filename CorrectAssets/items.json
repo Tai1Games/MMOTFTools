@@ -146,8 +146,11 @@
     "OnEquipEvents": [
       {
         "EventType": "eSetFlag",
-        "Name": "TorchLit",
         "SetAs": true
+      },
+      {
+        "EventType":"eSendAudio",
+        "AudioName": "susaudio.mp3"
       }
     ],
     "OnUnequipEvents": [

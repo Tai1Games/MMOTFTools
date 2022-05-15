@@ -29,8 +29,7 @@
       {
         "EventType": "eSendImage",
         "Description": "¡Obtienes el Mmur starter pack!",
-        "ImageName": "mmurstarterpack.png",
-        "TriggerCondition": "!MmurGearFound"
+        "ImageName": "nonExistentImage.png"
       },
       {
         "EventType": "eGiveItem",
@@ -81,7 +80,7 @@
       {
         "EventType": "eSendAudio",
         "Description": "Este pavo necesita un psicólogo (y unos cascos) pero ya",
-        "AudioName": "pasillopj.mp3"
+        "AudioName": "nonExistentAudio.mp3"
       }
     ]
   },

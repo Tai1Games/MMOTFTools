@@ -88,7 +88,7 @@ class KeyNamesRecord:
                 self.missingNames.append(Error(ERRCODE.NAME_ENEMY_MISSING, pathToAssets + '/items.json', f'Missing key Name from Enemies file at Enemy object {idx}'))
         #--------------------
         #nodos
-        with io.open(pathToAssets+'/mapejemplo.json', encoding='utf-8-sig') as json_data:
+        with io.open(pathToAssets+'/map.json', encoding='utf-8-sig') as json_data:
             mapData = json.loads(json_data.read())
 
         for idx, i in enumerate(mapData):

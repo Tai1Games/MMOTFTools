@@ -2,7 +2,7 @@ import os
 from tabnanny import check
 import Common, io, json
 from Error import ERRCODE, Error
-import Program
+from EngineConstants import checkEngineConstant, isFieldValid
 
 def checkItemsKeys(itemList, filePath):
     fails = list()
@@ -60,32 +60,33 @@ def checkAudio(audio, filePath):
         return False
     return True
 
-def checkEventReferences(event, filePath, errorList, keyNames):
-    eventType = event[0]['EventType']
-    if(eventType == 'eGiveItem'):
-        if(keyNames.containsItem(event['Item']) != True):
-            errorList.append(Error(ERRCODE.ITEM_ITEM_DOES_NOT_EXIST, filePath+'/items.json',
-                          f"{event['Item']} item does not exists"))
-    elif(eventType == 'eLearnAttack'):
-        if(keyNames.containsAttack(event['Attack']) != True):
-            errorList.append(Error(ERRCODE.ITEM_ATTACK_DOES_NOT_EXIST, filePath+'/items.json',
-                          f"{event['Attack']} attack does not exists"))
-    elif(eventType == 'eStartBattle'):
-        checkEnemies(event, filePath+'/items.json', errorList, keyNames)
-    elif(eventType == 'eSendAudio'):
-        if(checkAudio(event[0]['AudioName'], filePath) == False):
-            errorList.append(Error(ERRCODE.ITEM_AUDIO_DOES_NOT_EXIST, filePath+'/items.json',
-                          f"{event[0]['AudioName']} image does not exists"))
-    elif(eventType == 'eSendImage'):
-        if(checkImage(event[0]['ImageName'], filePath) == False):
-            errorList.append(Error(ERRCODE.ITEM_IMAGE_DOES_NOT_EXIST, filePath+'/items.json',
-                          f"{event[0]['ImageName']} image does not exists"))
-    elif(eventType == 'eSendImageCollection'):
-        for image in event['ImageCollection']:
-            if(checkImage(image, filePath) == False):
+def checkEventReferences(events, filePath, errorList, keyNames):
+    for event in events:
+        eventType = event['EventType']
+        if(eventType == 'eGiveItem'):
+            if(keyNames.containsItem(event['Item']) != True):
+                errorList.append(Error(ERRCODE.ITEM_ITEM_DOES_NOT_EXIST, filePath+'/items.json',
+                            f"{event['Item']} item does not exists"))
+        elif(eventType == 'eLearnAttack'):
+            if(keyNames.containsAttack(event['Attack']) != True):
+                errorList.append(Error(ERRCODE.ITEM_ATTACK_DOES_NOT_EXIST, filePath+'/items.json',
+                            f"{event['Attack']} attack does not exists"))
+        elif(eventType == 'eStartBattle'):
+            checkEnemies(event, filePath+'/items.json', errorList, keyNames)
+        elif(eventType == 'eSendAudio'):
+            if(checkAudio(event['AudioName'], filePath) == False):
+                errorList.append(Error(ERRCODE.ITEM_AUDIO_DOES_NOT_EXIST, filePath+'/items.json',
+                            f"{event['AudioName']} image does not exists"))
+        elif(eventType == 'eSendImage'):
+            if(checkImage(event['ImageName'], filePath) == False):
                 errorList.append(Error(ERRCODE.ITEM_IMAGE_DOES_NOT_EXIST, filePath+'/items.json',
-                            f"{event[0]['ImageName']} image does not exists"))
-    return
+                            f"{event['ImageName']} image does not exists"))
+        elif(eventType == 'eSendImageCollection'):
+            for image in event['ImageCollection']:
+                if(checkImage(image, filePath) == False):
+                    errorList.append(Error(ERRCODE.ITEM_IMAGE_DOES_NOT_EXIST, filePath+'/items.json',
+                                f"{event['ImageName']} image does not exists"))
+        return
 
 def checkItemReferences(itemList, filePath, keyNames):
     fails = list()
@@ -98,20 +99,20 @@ def checkItemReferences(itemList, filePath, keyNames):
 
 def checkUsableItemReferences(item, filePath, errorList):    
     for key in item['Key_Words']:
-        if(Program.checkEngineConstant(key['Value']['StatToChange'], "STAT") != True):
+        if(checkEngineConstant(key['Value']['StatToChange'], "STAT") != True):
             errorList.append(Error(ERRCODE.ITEM_UNKNOWN_STAT, filePath+'/items.json',
                 f"{key['Value']['StatToChange']} unknown stat"))
-        if(Program.checkEngineConstant(key['Value']['BehaviourType'], "BEHAVIOUR") != True):
+        if(checkEngineConstant(key['Value']['BehaviourType'], "BEHAVIOUR") != True):
             errorList.append(Error(ERRCODE.ITEM_UNKNOWN_BEHAVIOUR, filePath+'/items.json',
                 f"{key['Value']['BehaviourType']} unknown behaviour"))
 
 def checkEquipableItemReferences(item, filePath, errorList):
-    if(Program.checkEngineConstant(item['GearSlot'], "GEARSLOT") != True):
+    if(checkEngineConstant(item['GearSlot'], "GEARSLOT") != True):
         errorList.append(Error(ERRCODE.ITEM_UNKNOWN_GEARSLOT, filePath+'/items.json',
             f"{item['GearSlot']} unknown gear slot"))
     
     for stat in item['StatModifiers']:
-        if(Program.checkEngineConstant(stat, "STAT") != True):
+        if(checkEngineConstant(stat, "STAT") != True):
             errorList.append(Error(ERRCODE.ITEM_UNKNOWN_STAT, filePath+'/items.json',
                 f"{stat} unknown stat"))
 
@@ -146,7 +147,7 @@ def checkKeyWordsRepeated(itemList, filePath):
 def checkInvalidFields(itemList):
     invalidFields = dict()
     for item in itemList:
-        inv = [i for i in item.keys() if not Program.isFieldValid(i, "Object")]
+        inv = [i for i in item.keys() if not isFieldValid(i, "Object")]
         if len(inv) > 0:
             invalidFields[item["Name"]] = inv
     return len(invalidFields) > 0, invalidFields

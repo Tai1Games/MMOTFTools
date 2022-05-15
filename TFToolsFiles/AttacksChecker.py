@@ -3,7 +3,7 @@ import io
 import Common
 from Error import ERRCODE, Error
 from KNamesRecord import KeyNamesRecord
-from Program import checkEngineConstant, isFieldValid
+from EngineConstants import checkEngineConstant, isFieldValid
 
 
 def negativeValues(attacksList):

@@ -145,6 +145,7 @@
     },
     "OnEquipEvents": [
       {
+        "Name": "Nombre1",
         "EventType": "eSetFlag",
         "SetAs": true
       },
